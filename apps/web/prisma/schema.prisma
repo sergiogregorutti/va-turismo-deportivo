@@ -12,6 +12,17 @@ enum UserRole {
   USER
 }
 
+enum Country {
+  ARGENTINA
+  VENEZUELA
+}
+
+enum Modality {
+  PRACTICAR
+  COMPETIR
+  PRESENCIAR
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -20,4 +31,53 @@ model User {
   role      UserRole @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Discipline {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  slug        String       @unique
+  description String?
+  imageUrl    String?
+  modalities  Modality[]
+  experiences Experience[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Experience {
+  id           String     @id @default(cuid())
+  title        String
+  slug         String     @unique
+  description  String     @db.Text
+  country      Country
+  location     String
+  modality     Modality
+  disciplineId String
+  discipline   Discipline @relation(fields: [disciplineId], references: [id])
+  imageUrls    String[]
+  startDate    DateTime?
+  endDate      DateTime?
+  priceInfo    String?
+  featured     Boolean    @default(false)
+  published    Boolean    @default(false)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([country])
+  @@index([modality])
+  @@index([disciplineId])
+  @@index([published])
+  @@index([featured])
+}
+
+model ContactLead {
+  id          String   @id @default(cuid())
+  name        String
+  email       String?
+  cityCountry String?
+  services    String?
+  date        String?
+  message     String?  @db.Text
+  createdAt   DateTime @default(now())
 }
