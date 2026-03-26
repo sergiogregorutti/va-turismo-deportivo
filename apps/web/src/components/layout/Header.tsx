@@ -21,11 +21,11 @@ export function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
             <Image
-              src="/images/va_logo.svg"
+              src="/images/va_logo_inverted.svg"
               alt="VA Turismo Deportivo"
-              width={160}
-              height={40}
-              className="invert h-10 w-auto"
+              width={200}
+              height={56}
+              className="h-14 w-auto"
               priority
             />
           </Link>

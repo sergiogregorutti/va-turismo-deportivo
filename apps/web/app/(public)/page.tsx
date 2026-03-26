@@ -50,11 +50,11 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-b from-navy-900/50 to-navy-700/90" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-24 md:py-36 text-center">
           <Image
-            src="/images/va_isotipo.svg"
+            src="/images/va_isotipo_inverted.svg"
             alt="VA"
             width={100}
             height={100}
-            className="invert mx-auto mb-8"
+            className="mx-auto mb-8"
             priority
           />
           <h1 className="font-heading text-5xl md:text-7xl font-bold mb-4">
