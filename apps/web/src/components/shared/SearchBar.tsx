@@ -17,23 +17,19 @@ export function SearchBar({ disciplines }: SearchBarProps) {
   const destinoGroups = [
     {
       label: "Argentina",
-      options: [
-        { value: "ARGENTINA", label: "Argentina (todo)" },
-        ...CITIES.ARGENTINA.map((c) => ({
-          value: `ARGENTINA:${c.value}`,
-          label: c.label,
-        })),
-      ],
+      value: "ARGENTINA",
+      options: CITIES.ARGENTINA.map((c) => ({
+        value: `ARGENTINA:${c.value}`,
+        label: c.label,
+      })),
     },
     {
       label: "Venezuela",
-      options: [
-        { value: "VENEZUELA", label: "Venezuela (todo)" },
-        ...CITIES.VENEZUELA.map((c) => ({
-          value: `VENEZUELA:${c.value}`,
-          label: c.label,
-        })),
-      ],
+      value: "VENEZUELA",
+      options: CITIES.VENEZUELA.map((c) => ({
+        value: `VENEZUELA:${c.value}`,
+        label: c.label,
+      })),
     },
   ];
 
@@ -75,7 +71,7 @@ export function SearchBar({ disciplines }: SearchBarProps) {
             />
             <button
               type="submit"
-              className="bg-gold-400 hover:bg-gold-500 text-navy-900 font-semibold px-8 py-3 rounded-lg transition-colors whitespace-nowrap h-[48px]"
+              className="bg-gold-400 hover:bg-gold-500 text-navy-900 font-semibold px-8 py-3 rounded-lg transition-colors whitespace-nowrap h-[48px] cursor-pointer"
             >
               Buscar
             </button>

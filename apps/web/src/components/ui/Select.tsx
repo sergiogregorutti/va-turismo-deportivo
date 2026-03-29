@@ -9,6 +9,7 @@ export interface SelectOption {
 
 export interface SelectOptionGroup {
   label: string;
+  value?: string;
   options: SelectOption[];
 }
 
@@ -56,7 +57,10 @@ export function Select({
   const allOptions: SelectOption[] = options
     ? options
     : groups
-      ? groups.flatMap((g) => g.options)
+      ? groups.flatMap((g) => [
+          ...(g.value ? [{ value: g.value, label: g.label }] : []),
+          ...g.options,
+        ])
       : [];
 
   const selectedLabel =
@@ -81,7 +85,7 @@ export function Select({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full flex items-center justify-between px-4 py-3 bg-white border rounded-lg transition-all text-left ${
+        className={`w-full flex items-center justify-between px-4 py-3 bg-white border rounded-lg transition-all text-left cursor-pointer ${
           isOpen
             ? "border-gold-400 ring-2 ring-gold-400/20"
             : "border-gray-200 hover:border-gray-300"
@@ -109,7 +113,7 @@ export function Select({
             <button
               type="button"
               onClick={() => handleSelect("")}
-              className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
+              className={`w-full text-left px-4 py-2.5 text-sm transition-colors cursor-pointer ${
                 value === ""
                   ? "bg-gold-50 text-gold-700 font-medium"
                   : "text-gray-400 hover:bg-gray-50"
@@ -125,7 +129,7 @@ export function Select({
                 key={opt.value}
                 type="button"
                 onClick={() => handleSelect(opt.value)}
-                className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
+                className={`w-full text-left px-4 py-2.5 text-sm transition-colors cursor-pointer ${
                   value === opt.value
                     ? "bg-gold-50 text-gold-700 font-medium"
                     : "text-gray-700 hover:bg-gray-50"
@@ -138,15 +142,27 @@ export function Select({
           {groups &&
             groups.map((group) => (
               <div key={group.label}>
-                <div className="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider bg-gray-50 border-t border-gray-100">
+                <button
+                  type="button"
+                  onClick={() => group.value && handleSelect(group.value)}
+                  className={`w-full text-left px-4 py-2 text-xs font-semibold uppercase tracking-wider border-t border-gray-100 transition-colors ${
+                    group.value
+                      ? "cursor-pointer hover:bg-gray-100"
+                      : ""
+                  } ${
+                    value === group.value
+                      ? "bg-gold-50 text-gold-700"
+                      : "text-gray-400 bg-gray-50"
+                  }`}
+                >
                   {group.label}
-                </div>
+                </button>
                 {group.options.map((opt) => (
                   <button
                     key={opt.value}
                     type="button"
                     onClick={() => handleSelect(opt.value)}
-                    className={`w-full text-left px-6 py-2.5 text-sm transition-colors ${
+                    className={`w-full text-left px-6 py-2.5 text-sm transition-colors cursor-pointer ${
                       value === opt.value
                         ? "bg-gold-50 text-gold-700 font-medium"
                         : "text-gray-700 hover:bg-gray-50"
