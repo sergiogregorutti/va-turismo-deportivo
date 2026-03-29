@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { name, description, imageUrl, modalities } = body;
+    const { name, description, imageUrl, modalities, countries, cities } = body;
 
     if (!name || !modalities?.length) {
       return NextResponse.json(
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     const slug = slugify(name);
 
     const discipline = await prisma.discipline.create({
-      data: { name, slug, description, imageUrl, modalities },
+      data: { name, slug, description, imageUrl, modalities, countries: countries || [], cities: cities || [] },
     });
 
     return NextResponse.json(discipline, { status: 201 });

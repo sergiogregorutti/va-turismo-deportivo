@@ -10,6 +10,20 @@ const MODALITY_OPTIONS = [
   { value: "PRESENCIAR", label: "Presenciar" },
 ];
 
+const COUNTRY_OPTIONS = [
+  { value: "ARGENTINA", label: "Argentina" },
+  { value: "VENEZUELA", label: "Venezuela" },
+];
+
+const CITY_OPTIONS = [
+  { value: "BUENOS_AIRES", label: "Buenos Aires", country: "ARGENTINA" },
+  { value: "BARILOCHE", label: "Bariloche", country: "ARGENTINA" },
+  { value: "CORDOBA", label: "Córdoba", country: "ARGENTINA" },
+  { value: "LOS_ROQUES", label: "Los Roques", country: "VENEZUELA" },
+  { value: "MARGARITA", label: "Margarita", country: "VENEZUELA" },
+  { value: "LA_GRAN_SABANA", label: "La Gran Sabana", country: "VENEZUELA" },
+];
+
 export default function EditDisciplinePage() {
   const router = useRouter();
   const params = useParams();
@@ -20,6 +34,8 @@ export default function EditDisciplinePage() {
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [modalities, setModalities] = useState<string[]>([]);
+  const [countries, setCountries] = useState<string[]>([]);
+  const [cities, setCities] = useState<string[]>([]);
 
   useEffect(() => {
     async function load() {
@@ -30,6 +46,8 @@ export default function EditDisciplinePage() {
         setDescription(data.description || "");
         setImageUrl(data.imageUrl || "");
         setModalities(data.modalities || []);
+        setCountries(data.countries || []);
+        setCities(data.cities || []);
       }
       setFetching(false);
     }
@@ -45,7 +63,7 @@ export default function EditDisciplinePage() {
       const res = await fetch(`/api/disciplines/${params.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, description, imageUrl: imageUrl || null, modalities }),
+        body: JSON.stringify({ name, description, imageUrl: imageUrl || null, modalities, countries, cities }),
       });
 
       if (!res.ok) {
@@ -67,6 +85,22 @@ export default function EditDisciplinePage() {
     setModalities((prev) =>
       prev.includes(value)
         ? prev.filter((m) => m !== value)
+        : [...prev, value]
+    );
+  }
+
+  function toggleCountry(value: string) {
+    setCountries((prev) =>
+      prev.includes(value)
+        ? prev.filter((c) => c !== value)
+        : [...prev, value]
+    );
+  }
+
+  function toggleCity(value: string) {
+    setCities((prev) =>
+      prev.includes(value)
+        ? prev.filter((c) => c !== value)
         : [...prev, value]
     );
   }
@@ -152,6 +186,44 @@ export default function EditDisciplinePage() {
                     className="w-4 h-4 rounded border-gray-300 text-gold-400 focus:ring-gold-400"
                   />
                   <span className="text-sm text-gray-700">{m.label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Paises donde esta disponible
+            </label>
+            <div className="flex gap-6">
+              {COUNTRY_OPTIONS.map((c) => (
+                <label key={c.value} className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={countries.includes(c.value)}
+                    onChange={() => toggleCountry(c.value)}
+                    className="w-4 h-4 rounded border-gray-300 text-gold-400 focus:ring-gold-400"
+                  />
+                  <span className="text-sm text-gray-700">{c.label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Ciudades donde esta disponible
+            </label>
+            <div className="grid grid-cols-2 gap-3">
+              {CITY_OPTIONS.map((c) => (
+                <label key={c.value} className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={cities.includes(c.value)}
+                    onChange={() => toggleCity(c.value)}
+                    className="w-4 h-4 rounded border-gray-300 text-gold-400 focus:ring-gold-400"
+                  />
+                  <span className="text-sm text-gray-700">{c.label} ({c.country === "ARGENTINA" ? "AR" : "VE"})</span>
                 </label>
               ))}
             </div>

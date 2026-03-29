@@ -23,6 +23,24 @@ enum Modality {
   PRESENCIAR
 }
 
+enum City {
+  BUENOS_AIRES
+  BARILOCHE
+  CORDOBA
+  LOS_ROQUES
+  MARGARITA
+  LA_GRAN_SABANA
+}
+
+enum Formato {
+  SOLO
+  PAREJA
+  FAMILIA
+  AMIGOS
+  EQUIPO_DEPORTIVO
+  CORPORATIVO
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -40,6 +58,8 @@ model Discipline {
   description String?
   imageUrl    String?
   modalities  Modality[]
+  countries   Country[]
+  cities      City[]
   experiences Experience[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
@@ -51,8 +71,10 @@ model Experience {
   slug         String     @unique
   description  String     @db.Text
   country      Country
+  city         City?
   location     String
   modality     Modality
+  formato      Formato?
   disciplineId String
   discipline   Discipline @relation(fields: [disciplineId], references: [id])
   imageUrls    String[]
@@ -65,7 +87,9 @@ model Experience {
   updatedAt    DateTime   @updatedAt
 
   @@index([country])
+  @@index([city])
   @@index([modality])
+  @@index([formato])
   @@index([disciplineId])
   @@index([published])
   @@index([featured])

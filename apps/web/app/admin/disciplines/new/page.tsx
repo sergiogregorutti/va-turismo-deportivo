@@ -10,6 +10,20 @@ const MODALITY_OPTIONS = [
   { value: "PRESENCIAR", label: "Presenciar" },
 ];
 
+const COUNTRY_OPTIONS = [
+  { value: "ARGENTINA", label: "Argentina" },
+  { value: "VENEZUELA", label: "Venezuela" },
+];
+
+const CITY_OPTIONS = [
+  { value: "BUENOS_AIRES", label: "Buenos Aires", country: "ARGENTINA" },
+  { value: "BARILOCHE", label: "Bariloche", country: "ARGENTINA" },
+  { value: "CORDOBA", label: "Córdoba", country: "ARGENTINA" },
+  { value: "LOS_ROQUES", label: "Los Roques", country: "VENEZUELA" },
+  { value: "MARGARITA", label: "Margarita", country: "VENEZUELA" },
+  { value: "LA_GRAN_SABANA", label: "La Gran Sabana", country: "VENEZUELA" },
+];
+
 export default function NewDisciplinePage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -25,11 +39,21 @@ export default function NewDisciplinePage() {
       formData.get(`modality-${m.value}`)
     ).map((m) => m.value);
 
+    const countries = COUNTRY_OPTIONS.filter((c) =>
+      formData.get(`country-${c.value}`)
+    ).map((c) => c.value);
+
+    const cities = CITY_OPTIONS.filter((c) =>
+      formData.get(`city-${c.value}`)
+    ).map((c) => c.value);
+
     const body = {
       name: formData.get("name"),
       description: formData.get("description"),
       imageUrl: formData.get("imageUrl") || null,
       modalities,
+      countries,
+      cities,
     };
 
     try {
@@ -126,6 +150,42 @@ export default function NewDisciplinePage() {
                     className="w-4 h-4 rounded border-gray-300 text-gold-400 focus:ring-gold-400"
                   />
                   <span className="text-sm text-gray-700">{m.label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Paises donde esta disponible
+            </label>
+            <div className="flex gap-6">
+              {COUNTRY_OPTIONS.map((c) => (
+                <label key={c.value} className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    name={`country-${c.value}`}
+                    type="checkbox"
+                    className="w-4 h-4 rounded border-gray-300 text-gold-400 focus:ring-gold-400"
+                  />
+                  <span className="text-sm text-gray-700">{c.label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Ciudades donde esta disponible
+            </label>
+            <div className="grid grid-cols-2 gap-3">
+              {CITY_OPTIONS.map((c) => (
+                <label key={c.value} className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    name={`city-${c.value}`}
+                    type="checkbox"
+                    className="w-4 h-4 rounded border-gray-300 text-gold-400 focus:ring-gold-400"
+                  />
+                  <span className="text-sm text-gray-700">{c.label} ({c.country === "ARGENTINA" ? "AR" : "VE"})</span>
                 </label>
               ))}
             </div>

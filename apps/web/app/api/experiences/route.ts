@@ -2,12 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifyToken } from "@/lib/auth";
 import { slugify } from "@/lib/utils";
-import { Country, Modality, Prisma } from "@prisma/client";
+import { Country, Modality, City, Formato, Prisma } from "@prisma/client";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const country = searchParams.get("country") as Country | null;
+  const city = searchParams.get("city") as City | null;
   const modality = searchParams.get("modality") as Modality | null;
+  const formato = searchParams.get("formato") as Formato | null;
   const discipline = searchParams.get("discipline");
   const published = searchParams.get("published");
   const featured = searchParams.get("featured");
@@ -15,7 +17,9 @@ export async function GET(request: NextRequest) {
   const where: Prisma.ExperienceWhereInput = {};
 
   if (country) where.country = country;
+  if (city) where.city = city;
   if (modality) where.modality = modality;
+  if (formato) where.formato = formato;
   if (discipline) where.discipline = { slug: discipline };
   if (published === "true") where.published = true;
   if (published === "false") where.published = false;
@@ -46,8 +50,10 @@ export async function POST(request: NextRequest) {
       title,
       description,
       country,
+      city,
       location,
       modality,
+      formato,
       disciplineId,
       imageUrls,
       startDate,
@@ -72,8 +78,10 @@ export async function POST(request: NextRequest) {
         slug,
         description,
         country,
+        city: city || null,
         location,
         modality,
+        formato: formato || null,
         disciplineId,
         imageUrls: imageUrls || [],
         startDate: startDate ? new Date(startDate) : null,

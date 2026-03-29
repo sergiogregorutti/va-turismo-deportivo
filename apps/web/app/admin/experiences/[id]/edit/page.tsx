@@ -9,10 +9,32 @@ const COUNTRY_OPTIONS = [
   { value: "VENEZUELA", label: "Venezuela" },
 ];
 
+const CITY_OPTIONS: Record<string, { value: string; label: string }[]> = {
+  ARGENTINA: [
+    { value: "BUENOS_AIRES", label: "Buenos Aires" },
+    { value: "BARILOCHE", label: "Bariloche" },
+    { value: "CORDOBA", label: "Córdoba" },
+  ],
+  VENEZUELA: [
+    { value: "LOS_ROQUES", label: "Los Roques" },
+    { value: "MARGARITA", label: "Margarita" },
+    { value: "LA_GRAN_SABANA", label: "La Gran Sabana" },
+  ],
+};
+
 const MODALITY_OPTIONS = [
   { value: "PRACTICAR", label: "Practicar" },
   { value: "COMPETIR", label: "Competir" },
   { value: "PRESENCIAR", label: "Presenciar" },
+];
+
+const FORMATO_OPTIONS = [
+  { value: "SOLO", label: "Solo" },
+  { value: "PAREJA", label: "Pareja" },
+  { value: "FAMILIA", label: "Familia" },
+  { value: "AMIGOS", label: "Amigos" },
+  { value: "EQUIPO_DEPORTIVO", label: "Equipo Deportivo" },
+  { value: "CORPORATIVO", label: "Corporativo" },
 ];
 
 interface Discipline {
@@ -32,8 +54,10 @@ export default function EditExperiencePage() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [country, setCountry] = useState("");
+  const [city, setCity] = useState("");
   const [location, setLocation] = useState("");
   const [modality, setModality] = useState("");
+  const [formato, setFormato] = useState("");
   const [disciplineId, setDisciplineId] = useState("");
   const [imageUrls, setImageUrls] = useState<string[]>([""]);
   const [startDate, setStartDate] = useState("");
@@ -50,8 +74,10 @@ export default function EditExperiencePage() {
       setTitle(exp.title);
       setDescription(exp.description);
       setCountry(exp.country);
+      setCity(exp.city || "");
       setLocation(exp.location);
       setModality(exp.modality);
+      setFormato(exp.formato || "");
       setDisciplineId(exp.disciplineId);
       setImageUrls(exp.imageUrls?.length ? exp.imageUrls : [""]);
       setStartDate(exp.startDate ? exp.startDate.split("T")[0] : "");
@@ -95,8 +121,10 @@ export default function EditExperiencePage() {
           title,
           description,
           country,
+          city: city || null,
           location,
           modality,
+          formato: formato || null,
           disciplineId,
           imageUrls: imageUrls.filter((u) => u.trim()),
           startDate: startDate || null,
@@ -178,7 +206,7 @@ export default function EditExperiencePage() {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Pais *
@@ -186,11 +214,29 @@ export default function EditExperiencePage() {
               <select
                 required
                 value={country}
-                onChange={(e) => setCountry(e.target.value)}
+                onChange={(e) => { setCountry(e.target.value); setCity(""); }}
                 className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
               >
                 <option value="">Seleccionar pais</option>
                 {COUNTRY_OPTIONS.map((c) => (
+                  <option key={c.value} value={c.value}>
+                    {c.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Ciudad
+              </label>
+              <select
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
+              >
+                <option value="">Seleccionar ciudad</option>
+                {country && CITY_OPTIONS[country]?.map((c) => (
                   <option key={c.value} value={c.value}>
                     {c.label}
                   </option>
@@ -212,7 +258,7 @@ export default function EditExperiencePage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Modalidad *
@@ -227,6 +273,24 @@ export default function EditExperiencePage() {
                 {MODALITY_OPTIONS.map((m) => (
                   <option key={m.value} value={m.value}>
                     {m.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Formato
+              </label>
+              <select
+                value={formato}
+                onChange={(e) => setFormato(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
+              >
+                <option value="">Seleccionar formato</option>
+                {FORMATO_OPTIONS.map((f) => (
+                  <option key={f.value} value={f.value}>
+                    {f.label}
                   </option>
                 ))}
               </select>

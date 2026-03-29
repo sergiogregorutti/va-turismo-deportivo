@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { ExperienceCard } from "@/components/shared/ExperienceCard";
-import { Country, Modality, Prisma } from "@prisma/client";
+import { Country, Modality, City, Formato, Prisma } from "@prisma/client";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -20,6 +20,24 @@ const modalityLabels: Record<string, string> = {
   PRESENCIAR: "Presenciar",
 };
 
+const cityLabels: Record<string, string> = {
+  BUENOS_AIRES: "Buenos Aires",
+  BARILOCHE: "Bariloche",
+  CORDOBA: "Córdoba",
+  LOS_ROQUES: "Los Roques",
+  MARGARITA: "Margarita",
+  LA_GRAN_SABANA: "La Gran Sabana",
+};
+
+const formatoLabels: Record<string, string> = {
+  SOLO: "Solo",
+  PAREJA: "Pareja",
+  FAMILIA: "Familia",
+  AMIGOS: "Amigos",
+  EQUIPO_DEPORTIVO: "Equipo Deportivo",
+  CORPORATIVO: "Corporativo",
+};
+
 export default async function ExperienciasPage({
   searchParams,
 }: {
@@ -29,11 +47,27 @@ export default async function ExperienciasPage({
   const country = params.country as Country | undefined;
   const modality = params.modality as Modality | undefined;
   const discipline = params.discipline;
+  const formato = params.formato as Formato | undefined;
+  const destino = params.destino;
 
   const where: Prisma.ExperienceWhereInput = { published: true };
-  if (country) where.country = country;
+
+  // Handle destino param (can be "COUNTRY" or "COUNTRY:CITY")
+  if (destino) {
+    if (destino.includes(":")) {
+      const [countryPart, cityPart] = destino.split(":");
+      where.country = countryPart as Country;
+      where.city = cityPart as City;
+    } else {
+      where.country = destino as Country;
+    }
+  } else if (country) {
+    where.country = country;
+  }
+
   if (modality) where.modality = modality;
   if (discipline) where.discipline = { slug: discipline };
+  if (formato) where.formato = formato;
 
   const [experiences, disciplines] = await Promise.all([
     prisma.experience.findMany({
@@ -44,11 +78,22 @@ export default async function ExperienciasPage({
     prisma.discipline.findMany({ orderBy: { name: "asc" } }),
   ]);
 
-  const activeFilters = [
-    country && countryLabels[country],
-    modality && modalityLabels[modality],
-    discipline && disciplines.find((d) => d.slug === discipline)?.name,
-  ].filter(Boolean);
+  const activeFilters: string[] = [];
+  if (destino) {
+    activeFilters.push(
+      destino.includes(":")
+        ? cityLabels[destino.split(":")[1]]
+        : countryLabels[destino]
+    );
+  } else if (country) {
+    activeFilters.push(countryLabels[country]);
+  }
+  if (formato) activeFilters.push(formatoLabels[formato]);
+  if (modality) activeFilters.push(modalityLabels[modality]);
+  if (discipline) {
+    const d = disciplines.find((d) => d.slug === discipline);
+    if (d) activeFilters.push(d.name);
+  }
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -81,6 +126,24 @@ export default async function ExperienciasPage({
                   <option value="">Todos</option>
                   <option value="ARGENTINA">Argentina</option>
                   <option value="VENEZUELA">Venezuela</option>
+                </select>
+              </div>
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-600 mb-1">
+                  Formato
+                </label>
+                <select
+                  name="formato"
+                  defaultValue={formato || ""}
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-400 text-sm"
+                >
+                  <option value="">Todos</option>
+                  <option value="SOLO">Solo</option>
+                  <option value="PAREJA">Pareja</option>
+                  <option value="FAMILIA">Familia</option>
+                  <option value="AMIGOS">Amigos</option>
+                  <option value="EQUIPO_DEPORTIVO">Equipo Deportivo</option>
+                  <option value="CORPORATIVO">Corporativo</option>
                 </select>
               </div>
               <div className="flex-1">

@@ -11,11 +11,11 @@ export function Footer() {
           {/* Brand */}
           <div>
             <Image
-              src="/images/va_logo.svg"
+              src="/images/va_logo_inverted.svg"
               alt="VA Turismo Deportivo"
               width={180}
               height={45}
-              className="invert mb-4"
+              className="mb-4"
             />
             <p className="text-navy-300 text-sm leading-relaxed">
               Experiencias de turismo deportivo de elite en Argentina y

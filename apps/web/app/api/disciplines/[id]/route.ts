@@ -39,7 +39,7 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { name, description, imageUrl, modalities } = body;
+    const { name, description, imageUrl, modalities, countries, cities } = body;
 
     const discipline = await prisma.discipline.update({
       where: { id },
@@ -49,6 +49,8 @@ export async function PUT(
         description,
         imageUrl,
         modalities,
+        countries: countries || [],
+        cities: cities || [],
       },
     });
 

@@ -9,10 +9,32 @@ const COUNTRY_OPTIONS = [
   { value: "VENEZUELA", label: "Venezuela" },
 ];
 
+const CITY_OPTIONS: Record<string, { value: string; label: string }[]> = {
+  ARGENTINA: [
+    { value: "BUENOS_AIRES", label: "Buenos Aires" },
+    { value: "BARILOCHE", label: "Bariloche" },
+    { value: "CORDOBA", label: "Córdoba" },
+  ],
+  VENEZUELA: [
+    { value: "LOS_ROQUES", label: "Los Roques" },
+    { value: "MARGARITA", label: "Margarita" },
+    { value: "LA_GRAN_SABANA", label: "La Gran Sabana" },
+  ],
+};
+
 const MODALITY_OPTIONS = [
   { value: "PRACTICAR", label: "Practicar" },
   { value: "COMPETIR", label: "Competir" },
   { value: "PRESENCIAR", label: "Presenciar" },
+];
+
+const FORMATO_OPTIONS = [
+  { value: "SOLO", label: "Solo" },
+  { value: "PAREJA", label: "Pareja" },
+  { value: "FAMILIA", label: "Familia" },
+  { value: "AMIGOS", label: "Amigos" },
+  { value: "EQUIPO_DEPORTIVO", label: "Equipo Deportivo" },
+  { value: "CORPORATIVO", label: "Corporativo" },
 ];
 
 interface Discipline {
@@ -26,6 +48,7 @@ export default function NewExperiencePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [disciplines, setDisciplines] = useState<Discipline[]>([]);
+  const [country, setCountry] = useState("");
   const [modality, setModality] = useState("");
   const [imageUrls, setImageUrls] = useState<string[]>([""]);
 
@@ -64,8 +87,10 @@ export default function NewExperiencePage() {
       title: formData.get("title"),
       description: formData.get("description"),
       country: formData.get("country"),
+      city: formData.get("city") || null,
       location: formData.get("location"),
       modality: formData.get("modality"),
+      formato: formData.get("formato") || null,
       disciplineId: formData.get("disciplineId"),
       imageUrls: imageUrls.filter((u) => u.trim()),
       startDate: formData.get("startDate") || null,
@@ -145,7 +170,7 @@ export default function NewExperiencePage() {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Pais *
@@ -153,10 +178,29 @@ export default function NewExperiencePage() {
               <select
                 name="country"
                 required
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
               >
                 <option value="">Seleccionar pais</option>
                 {COUNTRY_OPTIONS.map((c) => (
+                  <option key={c.value} value={c.value}>
+                    {c.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Ciudad
+              </label>
+              <select
+                name="city"
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
+              >
+                <option value="">Seleccionar ciudad</option>
+                {country && CITY_OPTIONS[country]?.map((c) => (
                   <option key={c.value} value={c.value}>
                     {c.label}
                   </option>
@@ -178,7 +222,7 @@ export default function NewExperiencePage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Modalidad *
@@ -194,6 +238,23 @@ export default function NewExperiencePage() {
                 {MODALITY_OPTIONS.map((m) => (
                   <option key={m.value} value={m.value}>
                     {m.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Formato
+              </label>
+              <select
+                name="formato"
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
+              >
+                <option value="">Seleccionar formato</option>
+                {FORMATO_OPTIONS.map((f) => (
+                  <option key={f.value} value={f.value}>
+                    {f.label}
                   </option>
                 ))}
               </select>

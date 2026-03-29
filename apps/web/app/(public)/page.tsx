@@ -6,6 +6,8 @@ import { prisma } from "@/lib/prisma";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 import { getWhatsAppUrl } from "@/lib/utils";
 import { ExperienceCard } from "@/components/shared/ExperienceCard";
+import { SearchBar } from "@/components/shared/SearchBar";
+import { CalendarSection } from "@/components/shared/CalendarSection";
 
 const triada = [
   {
@@ -43,6 +45,16 @@ export default async function HomePage() {
     orderBy: { name: "asc" },
   });
 
+  const upcomingExperiences = await prisma.experience.findMany({
+    where: {
+      published: true,
+      startDate: { gte: new Date() },
+    },
+    include: { discipline: true },
+    orderBy: { startDate: "asc" },
+    take: 12,
+  });
+
   return (
     <>
       {/* Hero Section */}
@@ -50,18 +62,18 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-b from-navy-900/50 to-navy-700/90" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-24 md:py-36 text-center">
           <Image
-            src="/images/va_isotipo_inverted.svg"
-            alt="VA"
-            width={100}
-            height={100}
+            src="/images/va_logo_inverted.svg"
+            alt="VA Turismo Deportivo"
+            width={280}
+            height={70}
             className="mx-auto mb-8"
             priority
           />
           <h1 className="font-heading text-5xl md:text-7xl font-bold mb-4">
-            VA Turismo Deportivo
+            Experiencias Deportivas
           </h1>
           <p className="text-xl md:text-2xl text-navy-200 max-w-2xl mx-auto mb-10">
-            Experiencias de turismo deportivo de elite en Argentina y Venezuela
+            De Norte a Sur
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -81,63 +93,7 @@ export default async function HomePage() {
       </section>
 
       {/* Search Bar */}
-      <section className="bg-white py-12 border-b border-gray-100">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <form action="/experiencias" method="GET">
-            <div className="flex flex-col md:flex-row gap-4 items-end">
-              <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-600 mb-2">
-                  Destino
-                </label>
-                <select
-                  name="country"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-400"
-                >
-                  <option value="">Todos los paises</option>
-                  <option value="ARGENTINA">Argentina</option>
-                  <option value="VENEZUELA">Venezuela</option>
-                </select>
-              </div>
-              <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-600 mb-2">
-                  Modalidad
-                </label>
-                <select
-                  name="modality"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-400"
-                >
-                  <option value="">Todas</option>
-                  <option value="PRACTICAR">Practicar</option>
-                  <option value="COMPETIR">Competir</option>
-                  <option value="PRESENCIAR">Presenciar</option>
-                </select>
-              </div>
-              <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-600 mb-2">
-                  Disciplina
-                </label>
-                <select
-                  name="discipline"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-400"
-                >
-                  <option value="">Todas</option>
-                  {disciplines.map((d) => (
-                    <option key={d.id} value={d.slug}>
-                      {d.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <button
-                type="submit"
-                className="bg-gold-400 hover:bg-gold-500 text-navy-900 font-semibold px-8 py-3 rounded-lg transition-colors whitespace-nowrap"
-              >
-                Buscar
-              </button>
-            </div>
-          </form>
-        </div>
-      </section>
+      <SearchBar disciplines={disciplines} />
 
       {/* La Triada */}
       <section className="bg-navy-800 py-20">
@@ -172,6 +128,9 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Calendar */}
+      <CalendarSection experiences={upcomingExperiences} />
 
       {/* Featured Experiences */}
       {featuredExperiences.length > 0 && (
