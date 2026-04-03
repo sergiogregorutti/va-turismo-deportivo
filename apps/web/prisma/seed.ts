@@ -336,6 +336,29 @@ async function main() {
     }),
   ]);
 
+  // Create sample hospedajes
+  await prisma.hospedaje.upsert({
+    where: { slug: "departamento-tematico-futbol-palermo" },
+    update: {},
+    create: {
+      title: "Departamento Tematico Futbolistico - Palermo Soho",
+      slug: "departamento-tematico-futbol-palermo",
+      description:
+        "Un Airbnb de tematica futbolistica. Unico. Invitando a cada huesped a vivir una experiencia inolvidable.\n\nLa ambientacion se basa en la pasion por el futbol, destacando principalmente la figura de Lionel Messi. La historia, los colores, las texturas y los elementos iconicos del deporte. Se busca que tanto los aficionados como aquellos que no son tan entusiastas se sientan inmersos en la emocion del futbol.\n\nLa experiencia esta inmersa en dos pilares fundamentales:\n\nAmbientacion: mobiliario, graficas, elementos de decoracion e iluminacion. Cesped sintetico completo con detalles de lineas de cancha, neon de cancha en el cielorraso, pared detras de la cama con mural/vinilo impreso con grafica, banco de simil cemento con butacas estilo banco de suplentes, vitrina museo con camisetas y memorabilia.\n\nExperiencias adicionales: pantalla LED gigante, experiencia olfativa y ambiente sonoro con ambientacion acustica con parlantes.\n\nEl bano cuenta con interiorismo tematico: vinilo sobre espejo, alfombra de pelota, pelotas reales colgando del techo, tubo fluorescente verde y toallas brandeadas Messi 10.\n\nUbicado en el corazon de Palermo Soho, sobre la calle Borges, a pasos de los mejores restaurantes, bares y tiendas de Buenos Aires.",
+      country: Country.ARGENTINA,
+      city: "BUENOS_AIRES",
+      location: "Palermo Soho - Borges, Buenos Aires",
+      imageUrls: [
+        "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1200",
+        "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200",
+        "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1200",
+      ],
+      priceInfo: "Consultar",
+      featured: true,
+      published: true,
+    },
+  });
+
   console.log("Seed completed successfully!");
 }
 

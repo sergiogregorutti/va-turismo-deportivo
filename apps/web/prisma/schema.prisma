@@ -95,6 +95,27 @@ model Experience {
   @@index([featured])
 }
 
+model Hospedaje {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String   @db.Text
+  country     Country
+  city        City?
+  location    String
+  imageUrls   String[]
+  priceInfo   String?
+  featured    Boolean  @default(false)
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([country])
+  @@index([city])
+  @@index([published])
+  @@index([featured])
+}
+
 model ContactLead {
   id          String   @id @default(cuid())
   name        String
