@@ -1,55 +1,32 @@
 "use client";
 
 import { Select } from "@/components/ui/Select";
-import { CITIES, FORMATOS, MONTHS } from "@/lib/constants";
-
-interface Discipline {
-  id: string;
-  name: string;
-  slug: string;
-}
+import { useFilterOptions } from "@/hooks/useFilterOptions";
 
 interface ExperienciasFilterBarProps {
-  disciplines: Discipline[];
-  currentDestino?: string;
-  currentCountry?: string;
-  currentFormato?: string;
-  currentModality?: string;
-  currentDiscipline?: string;
-  currentMonth?: string;
-  activeFilters: string[];
+  initialDestino?: string;
+  initialFormato?: string;
+  initialModality?: string;
+  initialDiscipline?: string;
+  initialMonth?: string;
 }
 
 export function ExperienciasFilterBar({
-  disciplines,
-  currentDestino,
-  currentCountry,
-  currentFormato,
-  currentModality,
-  currentDiscipline,
-  currentMonth,
-  activeFilters,
+  initialDestino,
+  initialFormato,
+  initialModality,
+  initialDiscipline,
+  initialMonth,
 }: ExperienciasFilterBarProps) {
-  const destinoGroups = [
-    {
-      label: "Argentina",
-      value: "ARGENTINA",
-      options: CITIES.ARGENTINA.map((c) => ({
-        value: `ARGENTINA:${c.value}`,
-        label: c.label,
-      })),
-    },
-    {
-      label: "Venezuela",
-      value: "VENEZUELA",
-      options: CITIES.VENEZUELA.map((c) => ({
-        value: `VENEZUELA:${c.value}`,
-        label: c.label,
-      })),
-    },
-  ];
+  const { filters, options, setFilter, activeFilterLabels } = useFilterOptions({
+    destino: initialDestino || "",
+    formato: initialFormato || "",
+    modality: initialModality || "",
+    discipline: initialDiscipline || "",
+    month: initialMonth || "",
+  });
 
-  const defaultDestino = currentDestino || currentCountry || "";
+  const hasFilters = activeFilterLabels.length > 0;
 
   return (
     <section className="bg-white border-b border-gray-100 py-6">
@@ -60,43 +37,41 @@ export function ExperienciasFilterBar({
               name="destino"
               label="Destino"
               placeholder="Todos los destinos"
-              defaultValue={defaultDestino}
-              groups={destinoGroups}
+              value={filters.destino}
+              onChange={(v) => setFilter("destino", v)}
+              groups={options.destinos}
             />
             <Select
               name="formato"
               label="Formato"
               placeholder="Todos"
-              defaultValue={currentFormato || ""}
-              options={FORMATOS}
+              value={filters.formato}
+              onChange={(v) => setFilter("formato", v)}
+              options={options.formatos}
             />
             <Select
               name="modality"
               label="Modalidad"
               placeholder="Todas"
-              defaultValue={currentModality || ""}
-              options={[
-                { value: "PRACTICAR", label: "Practicar" },
-                { value: "COMPETIR", label: "Competir" },
-                { value: "PRESENCIAR", label: "Presenciar" },
-              ]}
+              value={filters.modality}
+              onChange={(v) => setFilter("modality", v)}
+              options={options.modalities}
             />
             <Select
               name="discipline"
               label="Disciplina"
               placeholder="Todas"
-              defaultValue={currentDiscipline || ""}
-              options={disciplines.map((d) => ({
-                value: d.slug,
-                label: d.name,
-              }))}
+              value={filters.discipline}
+              onChange={(v) => setFilter("discipline", v)}
+              options={options.disciplines}
             />
             <Select
               name="month"
               label="Fechas"
               placeholder="Todos los meses"
-              defaultValue={currentMonth || ""}
-              options={MONTHS}
+              value={filters.month}
+              onChange={(v) => setFilter("month", v)}
+              options={options.months}
             />
             <div className="flex gap-2">
               <button
@@ -105,7 +80,7 @@ export function ExperienciasFilterBar({
               >
                 Filtrar
               </button>
-              {activeFilters.length > 0 && (
+              {hasFilters && (
                 <a
                   href="/experiencias"
                   className="px-4 py-3 border border-gray-200 rounded-lg text-gray-500 hover:bg-gray-50 transition-colors cursor-pointer whitespace-nowrap"
@@ -117,9 +92,9 @@ export function ExperienciasFilterBar({
           </div>
         </form>
 
-        {activeFilters.length > 0 && (
+        {hasFilters && (
           <div className="flex gap-2 mt-4 flex-wrap">
-            {activeFilters.map((filter) => (
+            {activeFilterLabels.map((filter) => (
               <span
                 key={filter}
                 className="text-xs px-3 py-1.5 rounded-full bg-navy-50 text-navy-600 font-medium"

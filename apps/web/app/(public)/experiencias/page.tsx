@@ -1,57 +1,13 @@
 import { prisma } from "@/lib/prisma";
 import { ExperienceCard } from "@/components/shared/ExperienceCard";
 import { ExperienciasFilterBar } from "@/components/shared/ExperienciasFilterBar";
-import { Country, Modality, City, Formato, Prisma } from "@prisma/client";
+import { Country, City, Modality, Formato, Prisma } from "@prisma/client";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Experiencias",
   description:
     "Descubri las mejores experiencias de turismo deportivo en Argentina y Venezuela",
-};
-
-const countryLabels: Record<string, string> = {
-  ARGENTINA: "Argentina",
-  VENEZUELA: "Venezuela",
-};
-
-const modalityLabels: Record<string, string> = {
-  PRACTICAR: "Practicar",
-  COMPETIR: "Competir",
-  PRESENCIAR: "Presenciar",
-};
-
-const cityLabels: Record<string, string> = {
-  BUENOS_AIRES: "Buenos Aires",
-  BARILOCHE: "Bariloche",
-  CORDOBA: "Córdoba",
-  LOS_ROQUES: "Los Roques",
-  MARGARITA: "Margarita",
-  LA_GRAN_SABANA: "La Gran Sabana",
-};
-
-const formatoLabels: Record<string, string> = {
-  SOLO: "Solo",
-  PAREJA: "Pareja",
-  FAMILIA: "Familia",
-  AMIGOS: "Amigos",
-  EQUIPO_DEPORTIVO: "Equipo Deportivo",
-  CORPORATIVO: "Corporativo",
-};
-
-const monthLabels: Record<string, string> = {
-  "1": "Enero",
-  "2": "Febrero",
-  "3": "Marzo",
-  "4": "Abril",
-  "5": "Mayo",
-  "6": "Junio",
-  "7": "Julio",
-  "8": "Agosto",
-  "9": "Septiembre",
-  "10": "Octubre",
-  "11": "Noviembre",
-  "12": "Diciembre",
 };
 
 export default async function ExperienciasPage({
@@ -69,7 +25,6 @@ export default async function ExperienciasPage({
 
   const where: Prisma.ExperienceWhereInput = { published: true };
 
-  // Handle destino param (can be "COUNTRY" or "COUNTRY:CITY")
   if (destino) {
     if (destino.includes(":")) {
       const [countryPart, cityPart] = destino.split(":");
@@ -88,37 +43,17 @@ export default async function ExperienciasPage({
   if (month) {
     const m = parseInt(month);
     const year = new Date().getFullYear();
-    const startOfMonth = new Date(year, m - 1, 1);
-    const endOfMonth = new Date(year, m, 1);
-    where.startDate = { gte: startOfMonth, lt: endOfMonth };
+    where.startDate = { gte: new Date(year, m - 1, 1), lt: new Date(year, m, 1) };
   }
 
-  const [experiences, disciplines] = await Promise.all([
-    prisma.experience.findMany({
-      where,
-      include: { discipline: true },
-      orderBy: { createdAt: "desc" },
-    }),
-    prisma.discipline.findMany({ orderBy: { name: "asc" } }),
-  ]);
+  const experiences = await prisma.experience.findMany({
+    where,
+    include: { discipline: true },
+    orderBy: { createdAt: "desc" },
+  });
 
-  const activeFilters: string[] = [];
-  if (destino) {
-    activeFilters.push(
-      destino.includes(":")
-        ? cityLabels[destino.split(":")[1]]
-        : countryLabels[destino]
-    );
-  } else if (country) {
-    activeFilters.push(countryLabels[country]);
-  }
-  if (formato) activeFilters.push(formatoLabels[formato]);
-  if (modality) activeFilters.push(modalityLabels[modality]);
-  if (discipline) {
-    const d = disciplines.find((d) => d.slug === discipline);
-    if (d) activeFilters.push(d.name);
-  }
-  if (month && monthLabels[month]) activeFilters.push(monthLabels[month]);
+  // Pass initial filter values from URL to the client component
+  const initialDestino = destino || (country ? country : undefined);
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -136,14 +71,11 @@ export default async function ExperienciasPage({
 
       {/* Filters */}
       <ExperienciasFilterBar
-        disciplines={disciplines}
-        currentDestino={destino}
-        currentCountry={country}
-        currentFormato={formato}
-        currentModality={modality}
-        currentDiscipline={discipline}
-        currentMonth={month}
-        activeFilters={activeFilters}
+        initialDestino={initialDestino}
+        initialFormato={formato}
+        initialModality={modality}
+        initialDiscipline={discipline}
+        initialMonth={month}
       />
 
       {/* Results */}

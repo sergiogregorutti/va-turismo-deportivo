@@ -1,37 +1,10 @@
 "use client";
 
 import { Select } from "@/components/ui/Select";
-import { CITIES, FORMATOS, MONTHS } from "@/lib/constants";
+import { useFilterOptions } from "@/hooks/useFilterOptions";
 
-interface Discipline {
-  id: string;
-  name: string;
-  slug: string;
-}
-
-interface SearchBarProps {
-  disciplines: Discipline[];
-}
-
-export function SearchBar({ disciplines }: SearchBarProps) {
-  const destinoGroups = [
-    {
-      label: "Argentina",
-      value: "ARGENTINA",
-      options: CITIES.ARGENTINA.map((c) => ({
-        value: `ARGENTINA:${c.value}`,
-        label: c.label,
-      })),
-    },
-    {
-      label: "Venezuela",
-      value: "VENEZUELA",
-      options: CITIES.VENEZUELA.map((c) => ({
-        value: `VENEZUELA:${c.value}`,
-        label: c.label,
-      })),
-    },
-  ];
+export function SearchBar() {
+  const { filters, options, setFilter } = useFilterOptions();
 
   return (
     <section className="bg-white py-12 border-b border-gray-100">
@@ -42,38 +15,41 @@ export function SearchBar({ disciplines }: SearchBarProps) {
               name="destino"
               label="Destino"
               placeholder="Todos los destinos"
-              groups={destinoGroups}
+              value={filters.destino}
+              onChange={(v) => setFilter("destino", v)}
+              groups={options.destinos}
             />
             <Select
               name="formato"
               label="Formato"
               placeholder="Todos"
-              options={FORMATOS}
+              value={filters.formato}
+              onChange={(v) => setFilter("formato", v)}
+              options={options.formatos}
             />
             <Select
               name="modality"
               label="Modalidad"
               placeholder="Todas"
-              options={[
-                { value: "PRACTICAR", label: "Practicar" },
-                { value: "COMPETIR", label: "Competir" },
-                { value: "PRESENCIAR", label: "Presenciar" },
-              ]}
+              value={filters.modality}
+              onChange={(v) => setFilter("modality", v)}
+              options={options.modalities}
             />
             <Select
               name="discipline"
               label="Disciplina"
               placeholder="Todas"
-              options={disciplines.map((d) => ({
-                value: d.slug,
-                label: d.name,
-              }))}
+              value={filters.discipline}
+              onChange={(v) => setFilter("discipline", v)}
+              options={options.disciplines}
             />
             <Select
               name="month"
               label="Fechas"
               placeholder="Todos los meses"
-              options={MONTHS}
+              value={filters.month}
+              onChange={(v) => setFilter("month", v)}
+              options={options.months}
             />
             <button
               type="submit"

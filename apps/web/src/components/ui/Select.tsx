@@ -123,6 +123,12 @@ export function Select({
             </button>
           )}
 
+          {options && options.length === 0 && (
+            <div className="px-4 py-3 text-sm text-gray-400">
+              Sin opciones disponibles
+            </div>
+          )}
+
           {options &&
             options.map((opt) => (
               <button

@@ -41,10 +41,6 @@ export default async function HomePage() {
     orderBy: { createdAt: "desc" },
   });
 
-  const disciplines = await prisma.discipline.findMany({
-    orderBy: { name: "asc" },
-  });
-
   const upcomingExperiences = await prisma.experience.findMany({
     where: {
       published: true,
@@ -61,7 +57,7 @@ export default async function HomePage() {
       <HeroSlider />
 
       {/* Search Bar */}
-      <SearchBar disciplines={disciplines} />
+      <SearchBar />
 
       {/* La Triada */}
       <section className="bg-navy-800 py-20">

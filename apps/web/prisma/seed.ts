@@ -1,4 +1,4 @@
-import { PrismaClient, Country, Modality } from "@prisma/client";
+import { PrismaClient, Country, Modality, City, Formato } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -155,15 +155,17 @@ async function main() {
   await Promise.all([
     prisma.experience.upsert({
       where: { slug: "esqui-en-bariloche" },
-      update: {},
+      update: { city: City.BARILOCHE, formato: Formato.FAMILIA },
       create: {
         title: "Esqui en Cerro Catedral - Bariloche",
         slug: "esqui-en-bariloche",
         description:
           "Vivi la experiencia de esquiar en el centro de esqui mas grande de Sudamerica. Cerro Catedral ofrece mas de 120 km de pistas para todos los niveles, desde principiantes hasta expertos. Disfruta de paisajes increibles con vista al lago Nahuel Huapi mientras desciendes por pistas de nieve de calidad internacional.",
         country: Country.ARGENTINA,
+        city: City.BARILOCHE,
         location: "Bariloche, Rio Negro",
         modality: Modality.PRACTICAR,
+        formato: Formato.FAMILIA,
         disciplineId: esqui.id,
         imageUrls: [
           "https://images.unsplash.com/photo-1551524559-8af4e6624178?w=1200",
@@ -179,15 +181,17 @@ async function main() {
     }),
     prisma.experience.upsert({
       where: { slug: "kite-en-los-roques" },
-      update: {},
+      update: { city: City.LOS_ROQUES, formato: Formato.AMIGOS },
       create: {
         title: "Kite Paradise - Los Roques",
         slug: "kite-en-los-roques",
         description:
           "Los Roques es uno de los destinos de kitesurf mas exclusivos del Caribe. Con vientos constantes de 15 a 20 nudos, aguas cristalinas y temperaturas de 28°C, es el lugar perfecto para practicar kite en un entorno paradisiaco. Condiciones ideales tanto para principiantes como para riders avanzados.",
         country: Country.VENEZUELA,
+        city: City.LOS_ROQUES,
         location: "Archipielago Los Roques",
         modality: Modality.PRACTICAR,
+        formato: Formato.AMIGOS,
         disciplineId: kite.id,
         imageUrls: [
           "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1200",
@@ -202,15 +206,17 @@ async function main() {
     }),
     prisma.experience.upsert({
       where: { slug: "cruce-de-los-andes" },
-      update: {},
+      update: { city: City.BARILOCHE, formato: Formato.EQUIPO_DEPORTIVO },
       create: {
         title: "Cruce de los Andes - Bariloche",
         slug: "cruce-de-los-andes",
         description:
           "Un desafio epico de trekking de alta montaña. Cruza la Cordillera de los Andes en una travesia de 40 km que te llevara por paisajes de ensueño, glaciares milenarios y bosques patagonicos. Altitud maxima: 2500m. Nivel: avanzado. Una experiencia que cambiara tu vida.",
         country: Country.ARGENTINA,
+        city: City.BARILOCHE,
         location: "Bariloche, Rio Negro",
         modality: Modality.COMPETIR,
+        formato: Formato.EQUIPO_DEPORTIVO,
         disciplineId: trekking.id,
         imageUrls: [
           "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200",
@@ -225,15 +231,17 @@ async function main() {
     }),
     prisma.experience.upsert({
       where: { slug: "river-plate-experiencia-vip" },
-      update: {},
+      update: { city: City.BUENOS_AIRES, formato: Formato.AMIGOS },
       create: {
         title: "Estadio Mas Monumental - Experiencia VIP",
         slug: "river-plate-experiencia-vip",
         description:
           "Vivi la pasion del futbol argentino desde el mejor lugar. Experiencia VIP en el Estadio Mas Monumental de River Plate. Incluye acceso a palco preferencial, catering exclusivo y la energia de mas de 80.000 hinchas. Una experiencia unica para los amantes del futbol.",
         country: Country.ARGENTINA,
+        city: City.BUENOS_AIRES,
         location: "Buenos Aires",
         modality: Modality.PRESENCIAR,
+        formato: Formato.AMIGOS,
         disciplineId: futbol.id,
         imageUrls: [
           "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200",
@@ -248,15 +256,17 @@ async function main() {
     }),
     prisma.experience.upsert({
       where: { slug: "buceo-en-isla-margarita" },
-      update: {},
+      update: { city: City.MARGARITA, formato: Formato.PAREJA },
       create: {
         title: "Buceo en Isla Margarita",
         slug: "buceo-en-isla-margarita",
         description:
           "Descubri los arrecifes de coral y la vida marina del Caribe venezolano. Inmersiones guiadas para todos los niveles en las aguas cristalinas de Isla Margarita. Avistamiento de tortugas marinas, rayas y una gran variedad de peces tropicales.",
         country: Country.VENEZUELA,
+        city: City.MARGARITA,
         location: "Isla Margarita, Nueva Esparta",
         modality: Modality.PRACTICAR,
+        formato: Formato.PAREJA,
         disciplineId: buceo.id,
         imageUrls: [
           "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200",
@@ -271,15 +281,17 @@ async function main() {
     }),
     prisma.experience.upsert({
       where: { slug: "polo-en-palermo" },
-      update: {},
+      update: { city: City.BUENOS_AIRES, formato: Formato.CORPORATIVO },
       create: {
         title: "Abierto de Polo de Palermo",
         slug: "polo-en-palermo",
         description:
           "Presencia el torneo de polo mas prestigioso del mundo. El Abierto Argentino de Polo en el Campo Argentino de Polo en Palermo reune a los mejores jugadores del planeta. Una experiencia unica que combina deporte, elegancia y tradicion argentina.",
         country: Country.ARGENTINA,
+        city: City.BUENOS_AIRES,
         location: "Palermo, Buenos Aires",
         modality: Modality.PRESENCIAR,
+        formato: Formato.CORPORATIVO,
         disciplineId: polo.id,
         imageUrls: [
           "https://images.unsplash.com/photo-1591228127791-8e2eaef098d3?w=1200",
@@ -293,15 +305,17 @@ async function main() {
     }),
     prisma.experience.upsert({
       where: { slug: "golf-en-nordelta" },
-      update: {},
+      update: { city: City.BUENOS_AIRES, formato: Formato.SOLO },
       create: {
         title: "Golf en Nordelta - Buenos Aires",
         slug: "golf-en-nordelta",
         description:
           "Disfruta de una jornada de golf en uno de los campos mas modernos de Argentina. El campo de Nordelta ofrece 18 hoyos de nivel internacional rodeados de lagunas y naturaleza. Ideal para golfistas de todos los niveles.",
         country: Country.ARGENTINA,
+        city: City.BUENOS_AIRES,
         location: "Nordelta, Buenos Aires",
         modality: Modality.PRACTICAR,
+        formato: Formato.SOLO,
         disciplineId: golf.id,
         imageUrls: [
           "https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=1200",
@@ -313,15 +327,17 @@ async function main() {
     }),
     prisma.experience.upsert({
       where: { slug: "maraton-de-buenos-aires" },
-      update: {},
+      update: { city: City.BUENOS_AIRES, formato: Formato.SOLO },
       create: {
         title: "Maraton Internacional de Buenos Aires",
         slug: "maraton-de-buenos-aires",
         description:
           "Corré la maraton mas importante de Sudamerica. El recorrido de 42 km te lleva por los puntos mas iconicos de Buenos Aires: el Obelisco, Puerto Madero, La Boca y Palermo. Miles de corredores de todo el mundo participan en esta fiesta del running.",
         country: Country.ARGENTINA,
+        city: City.BUENOS_AIRES,
         location: "Buenos Aires",
         modality: Modality.COMPETIR,
+        formato: Formato.SOLO,
         disciplineId: maraton.id,
         imageUrls: [
           "https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?w=1200",
@@ -339,14 +355,21 @@ async function main() {
   // Create sample hospedajes
   await prisma.hospedaje.upsert({
     where: { slug: "departamento-tematico-futbol-palermo" },
-    update: {},
+    update: {
+      city: City.BUENOS_AIRES,
+      imageUrls: [
+        "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1200",
+        "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200",
+        "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1200",
+      ],
+    },
     create: {
       title: "Departamento Tematico Futbolistico - Palermo Soho",
       slug: "departamento-tematico-futbol-palermo",
       description:
         "Un Airbnb de tematica futbolistica. Unico. Invitando a cada huesped a vivir una experiencia inolvidable.\n\nLa ambientacion se basa en la pasion por el futbol, destacando principalmente la figura de Lionel Messi. La historia, los colores, las texturas y los elementos iconicos del deporte. Se busca que tanto los aficionados como aquellos que no son tan entusiastas se sientan inmersos en la emocion del futbol.\n\nLa experiencia esta inmersa en dos pilares fundamentales:\n\nAmbientacion: mobiliario, graficas, elementos de decoracion e iluminacion. Cesped sintetico completo con detalles de lineas de cancha, neon de cancha en el cielorraso, pared detras de la cama con mural/vinilo impreso con grafica, banco de simil cemento con butacas estilo banco de suplentes, vitrina museo con camisetas y memorabilia.\n\nExperiencias adicionales: pantalla LED gigante, experiencia olfativa y ambiente sonoro con ambientacion acustica con parlantes.\n\nEl bano cuenta con interiorismo tematico: vinilo sobre espejo, alfombra de pelota, pelotas reales colgando del techo, tubo fluorescente verde y toallas brandeadas Messi 10.\n\nUbicado en el corazon de Palermo Soho, sobre la calle Borges, a pasos de los mejores restaurantes, bares y tiendas de Buenos Aires.",
       country: Country.ARGENTINA,
-      city: "BUENOS_AIRES",
+      city: City.BUENOS_AIRES,
       location: "Palermo Soho - Borges, Buenos Aires",
       imageUrls: [
         "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1200",
