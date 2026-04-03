@@ -1,8 +1,8 @@
 export const dynamic = "force-dynamic";
 
-import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { HeroSlider } from "@/components/shared/HeroSlider";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 import { getWhatsAppUrl } from "@/lib/utils";
 import { ExperienceCard } from "@/components/shared/ExperienceCard";
@@ -58,39 +58,7 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative bg-navy-700 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-navy-900/50 to-navy-700/90" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-24 md:py-36 text-center">
-          <Image
-            src="/images/va_logo_inverted.svg"
-            alt="VA Turismo Deportivo"
-            width={280}
-            height={70}
-            className="mx-auto mb-8"
-            priority
-          />
-          <h1 className="font-heading text-5xl md:text-7xl font-bold mb-4">
-            Experiencias Deportivas
-          </h1>
-          <p className="text-xl md:text-2xl text-navy-200 max-w-2xl mx-auto mb-10">
-            De Norte a Sur
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/experiencias?country=ARGENTINA"
-              className="bg-white text-navy-700 hover:bg-gray-100 font-semibold px-8 py-4 rounded-xl text-lg transition-colors"
-            >
-              Argentina
-            </Link>
-            <Link
-              href="/experiencias?country=VENEZUELA"
-              className="bg-gold-400 text-navy-900 hover:bg-gold-500 font-semibold px-8 py-4 rounded-xl text-lg transition-colors"
-            >
-              Venezuela
-            </Link>
-          </div>
-        </div>
-      </section>
+      <HeroSlider />
 
       {/* Search Bar */}
       <SearchBar disciplines={disciplines} />
