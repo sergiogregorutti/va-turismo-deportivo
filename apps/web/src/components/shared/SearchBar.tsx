@@ -1,7 +1,7 @@
 "use client";
 
 import { Select } from "@/components/ui/Select";
-import { CITIES, FORMATOS } from "@/lib/constants";
+import { CITIES, FORMATOS, MONTHS } from "@/lib/constants";
 
 interface Discipline {
   id: string;
@@ -37,7 +37,7 @@ export function SearchBar({ disciplines }: SearchBarProps) {
     <section className="bg-white py-12 border-b border-gray-100">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <form action="/experiencias" method="GET">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+          <div className="grid grid-cols-1 md:grid-cols-6 gap-4 items-end">
             <Select
               name="destino"
               label="Destino"
@@ -68,6 +68,12 @@ export function SearchBar({ disciplines }: SearchBarProps) {
                 value: d.slug,
                 label: d.name,
               }))}
+            />
+            <Select
+              name="month"
+              label="Fechas"
+              placeholder="Todos los meses"
+              options={MONTHS}
             />
             <button
               type="submit"

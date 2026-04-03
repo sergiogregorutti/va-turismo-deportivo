@@ -39,6 +39,21 @@ const formatoLabels: Record<string, string> = {
   CORPORATIVO: "Corporativo",
 };
 
+const monthLabels: Record<string, string> = {
+  "1": "Enero",
+  "2": "Febrero",
+  "3": "Marzo",
+  "4": "Abril",
+  "5": "Mayo",
+  "6": "Junio",
+  "7": "Julio",
+  "8": "Agosto",
+  "9": "Septiembre",
+  "10": "Octubre",
+  "11": "Noviembre",
+  "12": "Diciembre",
+};
+
 export default async function ExperienciasPage({
   searchParams,
 }: {
@@ -50,6 +65,7 @@ export default async function ExperienciasPage({
   const discipline = params.discipline;
   const formato = params.formato as Formato | undefined;
   const destino = params.destino;
+  const month = params.month;
 
   const where: Prisma.ExperienceWhereInput = { published: true };
 
@@ -69,6 +85,13 @@ export default async function ExperienciasPage({
   if (modality) where.modality = modality;
   if (discipline) where.discipline = { slug: discipline };
   if (formato) where.formato = formato;
+  if (month) {
+    const m = parseInt(month);
+    const year = new Date().getFullYear();
+    const startOfMonth = new Date(year, m - 1, 1);
+    const endOfMonth = new Date(year, m, 1);
+    where.startDate = { gte: startOfMonth, lt: endOfMonth };
+  }
 
   const [experiences, disciplines] = await Promise.all([
     prisma.experience.findMany({
@@ -95,6 +118,7 @@ export default async function ExperienciasPage({
     const d = disciplines.find((d) => d.slug === discipline);
     if (d) activeFilters.push(d.name);
   }
+  if (month && monthLabels[month]) activeFilters.push(monthLabels[month]);
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -118,6 +142,7 @@ export default async function ExperienciasPage({
         currentFormato={formato}
         currentModality={modality}
         currentDiscipline={discipline}
+        currentMonth={month}
         activeFilters={activeFilters}
       />
 

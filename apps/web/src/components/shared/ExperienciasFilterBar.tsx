@@ -1,7 +1,7 @@
 "use client";
 
 import { Select } from "@/components/ui/Select";
-import { CITIES, FORMATOS } from "@/lib/constants";
+import { CITIES, FORMATOS, MONTHS } from "@/lib/constants";
 
 interface Discipline {
   id: string;
@@ -16,6 +16,7 @@ interface ExperienciasFilterBarProps {
   currentFormato?: string;
   currentModality?: string;
   currentDiscipline?: string;
+  currentMonth?: string;
   activeFilters: string[];
 }
 
@@ -26,6 +27,7 @@ export function ExperienciasFilterBar({
   currentFormato,
   currentModality,
   currentDiscipline,
+  currentMonth,
   activeFilters,
 }: ExperienciasFilterBarProps) {
   const destinoGroups = [
@@ -53,7 +55,7 @@ export function ExperienciasFilterBar({
     <section className="bg-white border-b border-gray-100 py-6">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <form action="/experiencias" method="GET">
-          <div className="grid grid-cols-1 sm:grid-cols-6 gap-4 items-end">
+          <div className="grid grid-cols-1 sm:grid-cols-7 gap-4 items-end">
             <Select
               name="destino"
               label="Destino"
@@ -88,6 +90,13 @@ export function ExperienciasFilterBar({
                 value: d.slug,
                 label: d.name,
               }))}
+            />
+            <Select
+              name="month"
+              label="Fechas"
+              placeholder="Todos los meses"
+              defaultValue={currentMonth || ""}
+              options={MONTHS}
             />
             <div className="flex gap-2">
               <button
