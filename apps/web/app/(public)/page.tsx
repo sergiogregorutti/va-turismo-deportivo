@@ -73,7 +73,7 @@ export default async function HomePage() {
             {triada.map((item) => (
               <Link
                 key={item.title}
-                href={`/experiencias?modality=${item.modality}`}
+                href={`/${item.title.toLowerCase()}`}
                 className="group relative bg-navy-700 rounded-2xl overflow-hidden border border-navy-600/30 hover:border-gold-400/50 transition-all duration-300"
               >
                 <div className={`absolute inset-0 bg-gradient-to-b ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
