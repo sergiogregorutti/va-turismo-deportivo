@@ -47,6 +47,14 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  href="/nosotros"
+                  className="text-navy-300 hover:text-white transition-colors text-sm"
+                >
+                  Nosotros
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/contacto"
                   className="text-navy-300 hover:text-white transition-colors text-sm"
                 >
