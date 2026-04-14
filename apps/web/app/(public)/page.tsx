@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { HeroSlider } from "@/components/shared/HeroSlider";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 import { getWhatsAppUrl } from "@/lib/utils";
-import { ExperienceCard } from "@/components/shared/ExperienceCard";
+import { FeaturedExperiencesGrid } from "@/components/shared/FeaturedExperiencesGrid";
 import { SearchBar } from "@/components/shared/SearchBar";
 import { CalendarSection } from "@/components/shared/CalendarSection";
 import { CitiesSection } from "@/components/shared/CitiesSection";
@@ -105,11 +105,7 @@ export default async function HomePage() {
               Descubri las mejores experiencias de turismo deportivo
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {featuredExperiences.map((exp) => (
-                <ExperienceCard key={exp.id} experience={exp} />
-              ))}
-            </div>
+            <FeaturedExperiencesGrid experiences={featuredExperiences} />
 
             <div className="text-center mt-12">
               <Link

@@ -24,7 +24,7 @@ const CITY_OPTIONS: Record<string, { value: string; label: string }[]> = {
 
 const MODALITY_OPTIONS = [
   { value: "PRACTICAR", label: "Practicar" },
-  { value: "COMPETIR", label: "Competir" },
+  { value: "COMPETIR", label: "Participar" },
   { value: "PRESENCIAR", label: "Presenciar" },
 ];
 

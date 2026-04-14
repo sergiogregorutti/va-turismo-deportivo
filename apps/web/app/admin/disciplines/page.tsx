@@ -12,7 +12,7 @@ export default async function DisciplinesPage() {
 
   const modalityLabels: Record<string, string> = {
     PRACTICAR: "Practicar",
-    COMPETIR: "Competir",
+    COMPETIR: "Participar",
     PRESENCIAR: "Presenciar",
   };
 

@@ -66,7 +66,7 @@ const MODALITY_DATA: Record<
     heroDescription:
       "Para quienes buscan poner a prueba su preparacion en competencias organizadas, carreras y desafios deportivos alrededor del mundo.",
     description: [
-      "Competir es la esencia del espiritu deportivo. Es poner a prueba todo lo que entrenaste, superar tus marcas personales y vivir la adrenalina de medirte con otros atletas. En VA Turismo Deportivo organizamos tu experiencia completa para que solo tengas que concentrarte en dar lo mejor de vos.",
+      "Participar es la esencia del espiritu deportivo. Es poner a prueba todo lo que entrenaste, superar tus marcas personales y vivir la adrenalina de medirte con otros atletas. En VA Turismo Deportivo organizamos tu experiencia completa para que solo tengas que concentrarte en dar lo mejor de vos.",
       "Nos encargamos de toda la logistica: inscripcion a la competencia, traslados, alojamiento, y todo lo necesario para que llegues en las mejores condiciones al dia de la carrera o el evento. Ademas, complementamos la experiencia competitiva con actividades turisticas para que conozcas el destino.",
       "Desde maratones en las grandes ciudades hasta travesias de trekking en la Patagonia, pasando por triatlones y carreras de aventura, tenemos opciones para todos los niveles competitivos. Si tu pasion es desafiarte, nosotros te llevamos.",
     ],
