@@ -93,9 +93,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Calendar */}
-      <CalendarSection experiences={upcomingExperiences} />
-
       {/* Featured Experiences */}
       {featuredExperiences.length > 0 && (
         <section className="py-20 bg-gray-50">
@@ -124,6 +121,9 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* Calendar */}
+      <CalendarSection experiences={upcomingExperiences} />
 
       {/* WhatsApp CTA */}
       <section className="bg-navy-700 py-20">
