@@ -4,12 +4,12 @@ import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 
 const slides = [
-  { src: "/images/home_hero/1.png", alt: "Turismo deportivo en Argentina 1" },
-  { src: "/images/home_hero/2.png", alt: "Turismo deportivo en Argentina 2" },
-  { src: "/images/home_hero/3.png", alt: "Turismo deportivo en Argentina 3" },
-  { src: "/images/home_hero/4.png", alt: "Turismo deportivo en Argentina 4" },
-  { src: "/images/home_hero/5.png", alt: "Turismo deportivo en Argentina 5" },
-  { src: "/images/home_hero/6.png", alt: "Turismo deportivo en Argentina 6" },
+  { src: "/images/home_hero/1.jpg", alt: "Turismo deportivo en Argentina 1" },
+  { src: "/images/home_hero/2.jpg", alt: "Turismo deportivo en Argentina 2" },
+  { src: "/images/home_hero/3.jpg", alt: "Turismo deportivo en Argentina 3" },
+  { src: "/images/home_hero/4.jpg", alt: "Turismo deportivo en Argentina 4" },
+  { src: "/images/home_hero/5.jpg", alt: "Turismo deportivo en Argentina 5" },
+  { src: "/images/home_hero/6.jpg", alt: "Turismo deportivo en Argentina 6" },
 ];
 
 const INTERVAL = 5000;
