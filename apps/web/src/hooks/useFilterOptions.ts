@@ -82,8 +82,18 @@ export function useFilterOptions(initialValues?: Partial<FilterValues>) {
         signal: controller.signal,
       });
       if (res.ok) {
-        const data = await res.json();
-        setOptions(data);
+        const data: FilterOptions = await res.json();
+        setOptions({
+          destinos: data.destinos.map((g) => ({
+            ...g,
+            label: stripCount(g.label),
+            options: g.options.map((o) => ({ ...o, label: stripCount(o.label) })),
+          })),
+          formatos: data.formatos.map((o) => ({ ...o, label: stripCount(o.label) })),
+          modalities: data.modalities.map((o) => ({ ...o, label: stripCount(o.label) })),
+          disciplines: data.disciplines.map((o) => ({ ...o, label: stripCount(o.label) })),
+          months: data.months.map((o) => ({ ...o, label: stripCount(o.label) })),
+        });
       }
     } catch (e) {
       if (e instanceof DOMException && e.name === "AbortError") return;
