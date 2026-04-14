@@ -23,12 +23,6 @@ const monthNames = [
   "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
 ];
 
-const modalityColors: Record<string, string> = {
-  PRACTICAR: "bg-blue-500",
-  COMPETIR: "bg-amber-500",
-  PRESENCIAR: "bg-green-500",
-};
-
 const modalityLabels: Record<string, string> = {
   PRACTICAR: "Practicar",
   COMPETIR: "Competir",
@@ -107,7 +101,7 @@ export function CalendarSection({ experiences }: CalendarSectionProps) {
               </div>
 
               {/* Events list */}
-              <div className="bg-white rounded-b-xl border border-t-0 border-gray-100 divide-y divide-gray-100">
+              <div className="bg-white rounded-b-xl border border-t-0 border-gray-100 p-4 space-y-4">
                 {col.experiences.map((exp) => {
                     const start = new Date(exp.startDate!);
                     const end = exp.endDate ? new Date(exp.endDate) : null;
@@ -117,54 +111,61 @@ export function CalendarSection({ experiences }: CalendarSectionProps) {
                       <Link
                         key={exp.id}
                         href={`/experiencias/${exp.slug}`}
-                        className="flex gap-4 p-4 hover:bg-gray-50 transition-colors group"
+                        className="group block bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300"
                       >
                         {/* Image */}
-                        <div className="relative w-24 h-20 flex-shrink-0 rounded-lg overflow-hidden">
+                        <div className="relative h-44 overflow-hidden">
                           {imageUrl ? (
                             <Image
                               src={imageUrl}
                               alt={exp.title}
                               fill
-                              className="object-cover group-hover:scale-105 transition-transform duration-300"
-                              sizes="96px"
+                              className="object-cover group-hover:scale-105 transition-transform duration-500"
+                              sizes="(max-width: 768px) 100vw, 33vw"
                             />
                           ) : (
                             <div className="w-full h-full bg-navy-100 flex items-center justify-center">
-                              <span className="text-navy-300 text-2xl">
-                                🏔
-                              </span>
+                              <span className="text-navy-300 text-4xl">🏔</span>
                             </div>
                           )}
+                          {/* Top badges */}
+                          <div className="absolute top-3 left-3 flex gap-2">
+                            <span className="text-xs px-2.5 py-1 rounded-full bg-navy-700/80 text-white font-medium backdrop-blur-sm">
+                              {countryLabels[exp.country] || exp.country}
+                            </span>
+                            <span className="text-xs px-2.5 py-1 rounded-full bg-gold-400/90 text-navy-900 font-medium backdrop-blur-sm">
+                              {modalityLabels[exp.modality] || exp.modality}
+                            </span>
+                          </div>
                           {/* Date badge */}
-                          <div className="absolute bottom-1 left-1 bg-navy-700/90 text-white text-xs font-bold px-1.5 py-0.5 rounded backdrop-blur-sm">
-                            {start.getDate()}
+                          <div className="absolute bottom-3 left-3 bg-white/95 rounded-lg px-3 py-1.5 text-center shadow-md backdrop-blur-sm">
+                            <div className="text-lg font-bold text-navy-700 leading-none">
+                              {start.getDate()}
+                              {end && (
+                                <span className="text-gray-400 font-normal">
+                                  {" "}
+                                  &ndash; {end.getDate()}
+                                </span>
+                              )}
+                            </div>
+                            <div className="text-[10px] uppercase tracking-wider text-gray-500 mt-0.5">
+                              {monthNames[start.getMonth()].slice(0, 3)}
+                            </div>
                           </div>
                         </div>
 
                         {/* Info */}
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-semibold text-navy-700 text-sm leading-tight group-hover:text-gold-500 transition-colors line-clamp-2">
+                        <div className="p-4">
+                          <p className="text-xs text-gold-500 font-semibold uppercase tracking-wider mb-1">
+                            {exp.discipline.name}
+                          </p>
+                          <h4 className="font-heading text-base font-semibold text-navy-700 leading-tight group-hover:text-gold-500 transition-colors line-clamp-2">
                             {exp.title}
                           </h4>
-                          <p className="text-xs text-gray-500 mt-1 truncate">
+                          <p className="text-xs text-gray-500 mt-2">
                             {exp.location},{" "}
                             {countryLabels[exp.country] || exp.country}
                           </p>
-                          <div className="flex items-center gap-2 mt-1.5">
-                            <span
-                              className={`w-2 h-2 rounded-full flex-shrink-0 ${modalityColors[exp.modality] || "bg-gray-400"}`}
-                            />
-                            <span className="text-xs text-gray-400">
-                              {modalityLabels[exp.modality] || exp.modality}
-                            </span>
-                            {end && (
-                              <span className="text-xs text-gray-400">
-                                &middot; hasta {end.getDate()}/
-                                {end.getMonth() + 1}
-                              </span>
-                            )}
-                          </div>
                         </div>
                       </Link>
                     );
