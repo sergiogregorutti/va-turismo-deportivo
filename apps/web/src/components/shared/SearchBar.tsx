@@ -9,6 +9,10 @@ export function SearchBar() {
   return (
     <section className="bg-white py-12 border-b border-gray-100">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <h2 className="font-heading text-2xl md:text-3xl font-bold text-navy-700 text-center mb-8 max-w-4xl mx-auto leading-snug">
+          Armamos Experiencias a medida para que descubras y disfrutes los
+          mejores escenarios deportivos de Argentina, jugando como local
+        </h2>
         <form action="/experiencias" method="GET">
           <div className="grid grid-cols-1 md:grid-cols-6 gap-4 items-end">
             <Select
