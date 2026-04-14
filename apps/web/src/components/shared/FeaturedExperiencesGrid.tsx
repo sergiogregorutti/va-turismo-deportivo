@@ -3,6 +3,9 @@ import { ExperienceCard } from "./ExperienceCard";
 
 type ExperienceWithDiscipline = Experience & { discipline: Discipline };
 
+// Rotating heights so cards in each column stagger vertically
+const imageHeights = ["h-80", "h-52", "h-64", "h-44", "h-72", "h-56"];
+
 export function FeaturedExperiencesGrid({
   experiences,
 }: {
@@ -10,38 +13,16 @@ export function FeaturedExperiencesGrid({
 }) {
   if (experiences.length === 0) return null;
 
-  // Asymmetric layout needs at least 6 items at positions 0 and 2 as tall.
-  // With fewer items, fall back to a uniform 3-col grid.
-  const useAsymmetric = experiences.length >= 6;
-
-  if (!useAsymmetric) {
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {experiences.map((exp) => (
-          <ExperienceCard key={exp.id} experience={exp} />
-        ))}
-      </div>
-    );
-  }
-
-  const tallIndices = new Set([0, 2]);
-
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 auto-rows-[240px] gap-6">
-      {experiences.slice(0, 6).map((exp, i) => {
-        const isTall = tallIndices.has(i);
-        return (
-          <div
-            key={exp.id}
-            className={isTall ? "lg:row-span-2" : "lg:row-span-1"}
-          >
-            <ExperienceCard
-              experience={exp}
-              variant={isTall ? "tall" : "standard"}
-            />
-          </div>
-        );
-      })}
+    <div className="columns-1 md:columns-2 lg:columns-3 gap-6 [column-fill:_balance]">
+      {experiences.map((exp, i) => (
+        <div key={exp.id} className="break-inside-avoid mb-6">
+          <ExperienceCard
+            experience={exp}
+            imageHeightClass={imageHeights[i % imageHeights.length]}
+          />
+        </div>
+      ))}
     </div>
   );
 }
