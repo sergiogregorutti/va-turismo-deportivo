@@ -8,6 +8,7 @@ import { getWhatsAppUrl } from "@/lib/utils";
 import { ExperienceCard } from "@/components/shared/ExperienceCard";
 import { SearchBar } from "@/components/shared/SearchBar";
 import { CalendarSection } from "@/components/shared/CalendarSection";
+import { CitiesSection } from "@/components/shared/CitiesSection";
 
 const triada = [
   {
@@ -121,6 +122,9 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* Cities */}
+      <CitiesSection />
 
       {/* Calendar */}
       <CalendarSection experiences={upcomingExperiences} />
