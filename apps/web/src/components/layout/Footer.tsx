@@ -19,7 +19,7 @@ export function Footer() {
             />
             <p className="text-navy-300 text-sm leading-relaxed">
               Experiencias de turismo deportivo de elite en Argentina y
-              Venezuela. Practicar, competir y presenciar.
+              Venezuela. Practicar, participar y presenciar.
             </p>
           </div>
 

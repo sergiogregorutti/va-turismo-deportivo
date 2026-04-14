@@ -45,7 +45,7 @@ const monthLabels: Record<string, string> = {
 
 const modalityLabels: Record<string, string> = {
   PRACTICAR: "Practicar",
-  COMPETIR: "Competir",
+  COMPETIR: "Participar",
   PRESENCIAR: "Presenciar",
 };
 

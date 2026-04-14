@@ -38,7 +38,7 @@ export const MODALITIES = [
   },
   {
     value: "COMPETIR" as const,
-    label: "Competir",
+    label: "Participar",
     description: "Desafiar los limites",
   },
   {

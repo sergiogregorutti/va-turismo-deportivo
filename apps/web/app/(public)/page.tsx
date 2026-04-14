@@ -19,7 +19,7 @@ const triada = [
     gradient: "from-blue-900/80 to-blue-700/60",
   },
   {
-    title: "Competir",
+    title: "Participar",
     description: "Desafiar los limites",
     sports: "Maraton | Triatlon | Trekking",
     modality: "COMPETIR",

@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     template: "%s | VA Turismo Deportivo",
   },
   description:
-    "Experiencias de turismo deportivo en Argentina y Venezuela. Practicar, competir y presenciar los mejores eventos deportivos.",
+    "Experiencias de turismo deportivo en Argentina y Venezuela. Practicar, participar y presenciar los mejores eventos deportivos.",
 };
 
 export default function RootLayout({

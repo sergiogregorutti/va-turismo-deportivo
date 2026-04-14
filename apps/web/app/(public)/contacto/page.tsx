@@ -214,7 +214,7 @@ export default function ContactoPage() {
                   <li className="flex items-start gap-3">
                     <span className="text-gold-400 text-lg mt-0.5">✓</span>
                     <p className="text-navy-200 text-sm">
-                      Practicar, competir o presenciar: vos elegis
+                      Practicar, participar o presenciar: vos elegis
                     </p>
                   </li>
                 </ul>

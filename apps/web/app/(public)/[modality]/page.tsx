@@ -59,8 +59,8 @@ const MODALITY_DATA: Record<
     metaDescription:
       "Descubri experiencias deportivas para practicar y perfeccionar tu tecnica con instructores profesionales en destinos increibles.",
   },
-  competir: {
-    title: "Competir",
+  participar: {
+    title: "Participar",
     prismaModality: "COMPETIR",
     tagline: "Desafiar los limites",
     heroDescription:
@@ -89,7 +89,7 @@ const MODALITY_DATA: Record<
       },
     ],
     gradient: "from-amber-900/80 to-amber-700/60",
-    ctaLabel: "Ver experiencias para Competir",
+    ctaLabel: "Ver experiencias para Participar",
     whatsappMessage:
       "Hola! Me interesan las experiencias de competencia deportiva. Quiero mas informacion.",
     metaDescription:

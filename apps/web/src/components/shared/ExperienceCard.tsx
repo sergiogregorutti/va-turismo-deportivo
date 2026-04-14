@@ -4,7 +4,7 @@ import type { Experience, Discipline } from "@prisma/client";
 
 const modalityLabels: Record<string, string> = {
   PRACTICAR: "Practicar",
-  COMPETIR: "Competir",
+  COMPETIR: "Participar",
   PRESENCIAR: "Presenciar",
 };
 

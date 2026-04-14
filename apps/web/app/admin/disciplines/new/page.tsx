@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const MODALITY_OPTIONS = [
   { value: "PRACTICAR", label: "Practicar" },
-  { value: "COMPETIR", label: "Competir" },
+  { value: "COMPETIR", label: "Participar" },
   { value: "PRESENCIAR", label: "Presenciar" },
 ];
 

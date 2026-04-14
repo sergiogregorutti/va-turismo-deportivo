@@ -132,7 +132,7 @@ export default function NosotrosPage() {
                         Especialista en turismo deportivo
                       </p>
                       <p className="text-navy-200 text-sm mt-1">
-                        Practicar, competir o presenciar: de norte a sur
+                        Practicar, participar o presenciar: de norte a sur
                       </p>
                     </div>
                   </li>
