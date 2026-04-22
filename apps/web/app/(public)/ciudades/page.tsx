@@ -6,7 +6,7 @@ import { cities } from "@/data/cities";
 export const metadata: Metadata = {
   title: "Ciudades | VA Turismo Deportivo",
   description:
-    "Descubrí los destinos más icónicos del turismo deportivo en Argentina: Buenos Aires, Bariloche, Mendoza y Fitz Roy.",
+    "Descubrí los destinos más icónicos del turismo deportivo en Argentina: Buenos Aires, Bariloche, Mendoza y El Chaltén.",
 };
 
 export default function CitiesPage() {

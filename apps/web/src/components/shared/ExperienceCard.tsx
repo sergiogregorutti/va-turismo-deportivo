@@ -23,10 +23,14 @@ export function ExperienceCard({
   imageHeightClass?: string;
 }) {
   const imageUrl = experience.imageUrls[0];
+  const isExternal = !!experience.externalUrl;
+  const href = experience.externalUrl ?? `/experiencias/${experience.slug}`;
 
   return (
     <Link
-      href={`/experiencias/${experience.slug}`}
+      href={href}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
       className="group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 flex flex-col"
     >
       <div className={`relative ${imageHeightClass} overflow-hidden flex-shrink-0`}>

@@ -81,6 +81,7 @@ model Experience {
   startDate    DateTime?
   endDate      DateTime?
   priceInfo    String?
+  externalUrl  String?
   featured     Boolean    @default(false)
   published    Boolean    @default(false)
   createdAt    DateTime   @default(now())

@@ -25,7 +25,7 @@ export const cities: City[] = [
     name: "Buenos Aires",
     province: "Ciudad Autónoma de Buenos Aires",
     country: "Argentina",
-    image: "/images/destinos/Buenos Aires/6.jpg",
+    image: "/images/destinos/Buenos Aires/Destino Buenos Aires.png",
     tagline: "La capital del fútbol y la pasión deportiva",
     intro:
       "Cuna de clubes legendarios, estadios míticos y la cultura futbolera más intensa del mundo. Buenos Aires combina la mística del deporte rey con polo de nivel mundial, tenis, rugby y una agenda de eventos internacionales durante todo el año.",
@@ -65,7 +65,7 @@ export const cities: City[] = [
     name: "Bariloche",
     province: "Río Negro",
     country: "Argentina",
-    image: "/images/home_hero/4.jpg",
+    image: "/images/destinos/Bariloche/Destino Bariloche.png",
     tagline: "El corazón de la Patagonia deportiva",
     intro:
       "Enclavada entre el lago Nahuel Huapi y la cordillera de los Andes, Bariloche es el destino por excelencia para deportes de montaña. Cerro Catedral, trail running, trekking, kayak y pesca con mosca en un entorno de naturaleza imponente.",
@@ -105,7 +105,7 @@ export const cities: City[] = [
     name: "Mendoza",
     province: "Mendoza",
     country: "Argentina",
-    image: "/images/destinos/Mendoza/MENDOZA 2.jpg",
+    image: "/images/destinos/Mendoza/Destino Mendoza.png",
     tagline: "Deporte, vino y el Aconcagua de telón de fondo",
     intro:
       "Al pie del Aconcagua, la montaña más alta de América, Mendoza es sinónimo de montañismo, rafting, cicloturismo entre viñedos y un estilo de vida donde el deporte y el vino conviven naturalmente.",
@@ -141,11 +141,11 @@ export const cities: City[] = [
       "Aeropuerto Internacional Gobernador Francisco Gabrielli (MDZ), con vuelos diarios desde Buenos Aires y conexiones a Chile.",
   },
   {
-    slug: "fitz-roy",
-    name: "Fitz Roy",
+    slug: "el-chalten",
+    name: "El Chaltén",
     province: "Santa Cruz",
     country: "Argentina",
-    image: "/images/destinos/Fitz Roy/FITZ ROY.jpg",
+    image: "/images/destinos/El Chalten/Destino Chalten.png",
     tagline: "La catedral del trekking en la Patagonia",
     intro:
       "El Chaltén, a los pies del Cerro Fitz Roy, es la capital nacional del trekking. Senderos de clase mundial, escalada técnica en granito y paisajes glaciares únicos en el Parque Nacional Los Glaciares.",

@@ -11,6 +11,7 @@ interface Experience {
   country: string;
   location: string;
   modality: string;
+  externalUrl: string | null;
   discipline: { name: string };
 }
 
@@ -106,11 +107,15 @@ export function CalendarSection({ experiences }: CalendarSectionProps) {
                     const start = new Date(exp.startDate!);
                     const end = exp.endDate ? new Date(exp.endDate) : null;
                     const imageUrl = exp.imageUrls?.[0];
+                    const isExternal = !!exp.externalUrl;
+                    const href = exp.externalUrl ?? `/experiencias/${exp.slug}`;
 
                     return (
                       <Link
                         key={exp.id}
-                        href={`/experiencias/${exp.slug}`}
+                        href={href}
+                        target={isExternal ? "_blank" : undefined}
+                        rel={isExternal ? "noopener noreferrer" : undefined}
                         className="group block bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300"
                       >
                         {/* Image */}
