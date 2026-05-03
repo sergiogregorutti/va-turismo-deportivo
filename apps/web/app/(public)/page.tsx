@@ -10,6 +10,7 @@ import { SearchBar } from "@/components/shared/SearchBar";
 import { CalendarSection } from "@/components/shared/CalendarSection";
 import { CitiesSection } from "@/components/shared/CitiesSection";
 import { TriadaCards, type TriadaItem } from "@/components/shared/TriadaCards";
+import { AliadosMarquee } from "@/components/shared/AliadosMarquee";
 
 const triada: TriadaItem[] = [
   {
@@ -105,6 +106,9 @@ export default async function HomePage() {
 
       {/* Calendar */}
       <CalendarSection experiences={upcomingExperiences} />
+
+      {/* Aliados */}
+      <AliadosMarquee />
 
       {/* WhatsApp CTA */}
       <section className="bg-navy-700 py-20">

@@ -36,3 +36,17 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
 }
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  animation: marquee-scroll 40s linear infinite;
+  width: max-content;
+}
+
+.marquee-container:hover .marquee-track {
+  animation-play-state: paused;
+}
