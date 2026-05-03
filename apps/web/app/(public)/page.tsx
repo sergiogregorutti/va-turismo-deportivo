@@ -9,27 +9,28 @@ import { FeaturedExperiencesGrid } from "@/components/shared/FeaturedExperiences
 import { SearchBar } from "@/components/shared/SearchBar";
 import { CalendarSection } from "@/components/shared/CalendarSection";
 import { CitiesSection } from "@/components/shared/CitiesSection";
+import { TriadaCards, type TriadaItem } from "@/components/shared/TriadaCards";
 
-const triada = [
+const triada: TriadaItem[] = [
   {
     title: "Practicar",
     description: "Perfeccionar la tecnica",
-    sports: "Esqui | Buceo | Surf | Kite | Golf",
-    modality: "PRACTICAR",
+    detail: "Esqui | Buceo | Surf | Kite | Golf",
+    href: "/practicar",
     gradient: "from-blue-900/80 to-blue-700/60",
   },
   {
     title: "Participar",
     description: "Desafiar los limites",
-    sports: "Maraton | Triatlon | Trekking",
-    modality: "COMPETIR",
+    detail: "Maraton | Triatlon | Trekking",
+    href: "/participar",
     gradient: "from-amber-900/80 to-amber-700/60",
   },
   {
     title: "Presenciar",
     description: "Vivir la pasion",
-    sports: "Futbol | Polo | Tenis",
-    modality: "PRESENCIAR",
+    detail: "Futbol | Polo | Tenis",
+    href: "/presenciar",
     gradient: "from-green-900/80 to-green-700/60",
   },
 ];
@@ -70,27 +71,7 @@ export default async function HomePage() {
             Tres formas de vivir el deporte. Elegí la tuya.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {triada.map((item) => (
-              <Link
-                key={item.title}
-                href={`/${item.title.toLowerCase()}`}
-                className="group relative bg-navy-700 rounded-2xl overflow-hidden border border-navy-600/30 hover:border-gold-400/50 transition-all duration-300"
-              >
-                <div className={`absolute inset-0 bg-gradient-to-b ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
-                <div className="relative p-8 text-center">
-                  <h3 className="font-heading text-3xl font-bold text-white mb-2 uppercase tracking-wider">
-                    {item.title}
-                  </h3>
-                  <p className="text-gold-400 font-medium mb-6">
-                    {item.description}
-                  </p>
-                  <div className="w-12 h-0.5 bg-gold-400 mx-auto mb-6" />
-                  <p className="text-navy-300 text-sm">{item.sports}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
+          <TriadaCards items={triada} />
         </div>
       </section>
 

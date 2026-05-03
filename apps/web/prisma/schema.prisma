@@ -34,12 +34,9 @@ enum City {
 }
 
 enum Formato {
-  SOLO
-  PAREJA
-  FAMILIA
-  AMIGOS
-  EQUIPO_DEPORTIVO
+  LIFESTYLE
   CORPORATIVO
+  EQUIPOS
 }
 
 model User {

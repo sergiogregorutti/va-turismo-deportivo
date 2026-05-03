@@ -9,9 +9,8 @@ const navLinks = [
   { href: "/", label: "Inicio" },
   { href: "/experiencias", label: "Experiencias" },
   { href: "/ciudades", label: "Ciudades" },
-  { href: "/hospedajes", label: "Hospedaje" },
-  { href: "/nosotros", label: "Nosotros" },
-  { href: "/contacto", label: "Contacto" },
+  { href: "/servicios", label: "Servicios" },
+  { href: "/va", label: "VA" },
 ];
 
 export function Header() {

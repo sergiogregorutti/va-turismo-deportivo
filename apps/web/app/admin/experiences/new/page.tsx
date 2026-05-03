@@ -29,12 +29,9 @@ const MODALITY_OPTIONS = [
 ];
 
 const FORMATO_OPTIONS = [
-  { value: "SOLO", label: "Solo" },
-  { value: "PAREJA", label: "Pareja" },
-  { value: "FAMILIA", label: "Familia" },
-  { value: "AMIGOS", label: "Amigos" },
-  { value: "EQUIPO_DEPORTIVO", label: "Equipo Deportivo" },
+  { value: "LIFESTYLE", label: "Lifestyle" },
   { value: "CORPORATIVO", label: "Corporativo" },
+  { value: "EQUIPOS", label: "Equipos" },
 ];
 
 interface Discipline {

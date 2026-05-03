@@ -22,12 +22,21 @@ export const ALL_CITIES = [
 ];
 
 export const FORMATOS = [
-  { value: "SOLO" as const, label: "Solo" },
-  { value: "PAREJA" as const, label: "Pareja" },
-  { value: "FAMILIA" as const, label: "Familia" },
-  { value: "AMIGOS" as const, label: "Amigos" },
-  { value: "EQUIPO_DEPORTIVO" as const, label: "Equipo Deportivo" },
-  { value: "CORPORATIVO" as const, label: "Corporativo" },
+  {
+    value: "LIFESTYLE" as const,
+    label: "Lifestyle",
+    description: "En pareja, en familia o con amigos.",
+  },
+  {
+    value: "CORPORATIVO" as const,
+    label: "Corporativo",
+    description: "Empresas, marcas y grupos corporativos.",
+  },
+  {
+    value: "EQUIPOS" as const,
+    label: "Equipos",
+    description: "Equipos, delegaciones y grupos deportivos.",
+  },
 ];
 
 export const MODALITIES = [

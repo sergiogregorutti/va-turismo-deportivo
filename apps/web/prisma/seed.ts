@@ -155,7 +155,7 @@ async function main() {
   await Promise.all([
     prisma.experience.upsert({
       where: { slug: "esqui-en-bariloche" },
-      update: { city: City.BARILOCHE, formato: Formato.FAMILIA },
+      update: { city: City.BARILOCHE, formato: Formato.LIFESTYLE },
       create: {
         title: "Esqui en Cerro Catedral - Bariloche",
         slug: "esqui-en-bariloche",
@@ -165,7 +165,7 @@ async function main() {
         city: City.BARILOCHE,
         location: "Bariloche, Rio Negro",
         modality: Modality.PRACTICAR,
-        formato: Formato.FAMILIA,
+        formato: Formato.LIFESTYLE,
         disciplineId: esqui.id,
         imageUrls: [
           "https://images.unsplash.com/photo-1551524559-8af4e6624178?w=1200",
@@ -181,7 +181,7 @@ async function main() {
     }),
     prisma.experience.upsert({
       where: { slug: "kite-en-los-roques" },
-      update: { city: City.LOS_ROQUES, formato: Formato.AMIGOS },
+      update: { city: City.LOS_ROQUES, formato: Formato.LIFESTYLE },
       create: {
         title: "Kite Paradise - Los Roques",
         slug: "kite-en-los-roques",
@@ -191,7 +191,7 @@ async function main() {
         city: City.LOS_ROQUES,
         location: "Archipielago Los Roques",
         modality: Modality.PRACTICAR,
-        formato: Formato.AMIGOS,
+        formato: Formato.LIFESTYLE,
         disciplineId: kite.id,
         imageUrls: [
           "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1200",
@@ -206,7 +206,7 @@ async function main() {
     }),
     prisma.experience.upsert({
       where: { slug: "cruce-de-los-andes" },
-      update: { city: City.BARILOCHE, formato: Formato.EQUIPO_DEPORTIVO },
+      update: { city: City.BARILOCHE, formato: Formato.EQUIPOS },
       create: {
         title: "Cruce de los Andes - Bariloche",
         slug: "cruce-de-los-andes",
@@ -216,7 +216,7 @@ async function main() {
         city: City.BARILOCHE,
         location: "Bariloche, Rio Negro",
         modality: Modality.COMPETIR,
-        formato: Formato.EQUIPO_DEPORTIVO,
+        formato: Formato.EQUIPOS,
         disciplineId: trekking.id,
         imageUrls: [
           "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200",
@@ -231,7 +231,7 @@ async function main() {
     }),
     prisma.experience.upsert({
       where: { slug: "river-plate-experiencia-vip" },
-      update: { city: City.BUENOS_AIRES, formato: Formato.AMIGOS },
+      update: { city: City.BUENOS_AIRES, formato: Formato.LIFESTYLE },
       create: {
         title: "Estadio Mas Monumental - Experiencia VIP",
         slug: "river-plate-experiencia-vip",
@@ -241,7 +241,7 @@ async function main() {
         city: City.BUENOS_AIRES,
         location: "Buenos Aires",
         modality: Modality.PRESENCIAR,
-        formato: Formato.AMIGOS,
+        formato: Formato.LIFESTYLE,
         disciplineId: futbol.id,
         imageUrls: [
           "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200",
@@ -256,7 +256,7 @@ async function main() {
     }),
     prisma.experience.upsert({
       where: { slug: "buceo-en-isla-margarita" },
-      update: { city: City.MARGARITA, formato: Formato.PAREJA },
+      update: { city: City.MARGARITA, formato: Formato.LIFESTYLE },
       create: {
         title: "Buceo en Isla Margarita",
         slug: "buceo-en-isla-margarita",
@@ -266,7 +266,7 @@ async function main() {
         city: City.MARGARITA,
         location: "Isla Margarita, Nueva Esparta",
         modality: Modality.PRACTICAR,
-        formato: Formato.PAREJA,
+        formato: Formato.LIFESTYLE,
         disciplineId: buceo.id,
         imageUrls: [
           "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200",
@@ -305,7 +305,7 @@ async function main() {
     }),
     prisma.experience.upsert({
       where: { slug: "golf-en-nordelta" },
-      update: { city: City.BUENOS_AIRES, formato: Formato.SOLO },
+      update: { city: City.BUENOS_AIRES, formato: Formato.LIFESTYLE },
       create: {
         title: "Golf en Nordelta - Buenos Aires",
         slug: "golf-en-nordelta",
@@ -315,7 +315,7 @@ async function main() {
         city: City.BUENOS_AIRES,
         location: "Nordelta, Buenos Aires",
         modality: Modality.PRACTICAR,
-        formato: Formato.SOLO,
+        formato: Formato.LIFESTYLE,
         disciplineId: golf.id,
         imageUrls: [
           "https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=1200",
@@ -327,7 +327,7 @@ async function main() {
     }),
     prisma.experience.upsert({
       where: { slug: "maraton-de-buenos-aires" },
-      update: { city: City.BUENOS_AIRES, formato: Formato.SOLO },
+      update: { city: City.BUENOS_AIRES, formato: Formato.LIFESTYLE },
       create: {
         title: "Maraton Internacional de Buenos Aires",
         slug: "maraton-de-buenos-aires",
@@ -337,7 +337,7 @@ async function main() {
         city: City.BUENOS_AIRES,
         location: "Buenos Aires",
         modality: Modality.COMPETIR,
-        formato: Formato.SOLO,
+        formato: Formato.LIFESTYLE,
         disciplineId: maraton.id,
         imageUrls: [
           "https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?w=1200",

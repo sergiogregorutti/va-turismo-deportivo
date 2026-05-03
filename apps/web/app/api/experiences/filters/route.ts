@@ -32,12 +32,9 @@ const modalityLabels: Record<string, string> = {
 };
 
 const formatoLabels: Record<string, string> = {
-  SOLO: "Solo",
-  PAREJA: "Pareja",
-  FAMILIA: "Familia",
-  AMIGOS: "Amigos",
-  EQUIPO_DEPORTIVO: "Equipo Deportivo",
+  LIFESTYLE: "Lifestyle",
   CORPORATIVO: "Corporativo",
+  EQUIPOS: "Equipos",
 };
 
 const monthLabels: Record<number, string> = {

@@ -2,6 +2,7 @@
 
 import { Select } from "@/components/ui/Select";
 import { useFilterOptions } from "@/hooks/useFilterOptions";
+import { FormatoInfoPopover } from "@/components/shared/FormatoInfoPopover";
 
 export function SearchBar() {
   const { filters, options, setFilter } = useFilterOptions();
@@ -26,6 +27,7 @@ export function SearchBar() {
             <Select
               name="formato"
               label="Formato"
+              labelExtra={<FormatoInfoPopover />}
               placeholder="Todos"
               value={filters.formato}
               onChange={(v) => setFilter("formato", v)}

@@ -2,6 +2,7 @@
 
 import { Select } from "@/components/ui/Select";
 import { useFilterOptions } from "@/hooks/useFilterOptions";
+import { FormatoInfoPopover } from "@/components/shared/FormatoInfoPopover";
 
 interface ExperienciasFilterBarProps {
   initialDestino?: string;
@@ -44,6 +45,7 @@ export function ExperienciasFilterBar({
             <Select
               name="formato"
               label="Formato"
+              labelExtra={<FormatoInfoPopover />}
               placeholder="Todos"
               value={filters.formato}
               onChange={(v) => setFilter("formato", v)}

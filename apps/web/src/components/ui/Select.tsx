@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, type ReactNode } from "react";
 
 export interface SelectOption {
   value: string;
@@ -16,6 +16,7 @@ export interface SelectOptionGroup {
 interface SelectProps {
   name: string;
   label?: string;
+  labelExtra?: ReactNode;
   placeholder?: string;
   value?: string;
   defaultValue?: string;
@@ -29,6 +30,7 @@ interface SelectProps {
 export function Select({
   name,
   label,
+  labelExtra,
   placeholder = "Seleccionar",
   value: controlledValue,
   defaultValue = "",
@@ -77,9 +79,12 @@ export function Select({
   return (
     <div className={`relative ${className}`} ref={ref}>
       {label && (
-        <label className="block text-sm font-medium text-gray-600 mb-2">
-          {label}
-        </label>
+        <div className="flex items-center gap-1.5 mb-2">
+          <label className="block text-sm font-medium text-gray-600">
+            {label}
+          </label>
+          {labelExtra}
+        </div>
       )}
       <input type="hidden" name={name} value={value} required={required} />
       <button

@@ -47,18 +47,18 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/hospedajes"
+                  href="/servicios"
                   className="text-navy-300 hover:text-white transition-colors text-sm"
                 >
-                  Hospedaje
+                  Servicios
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/nosotros"
+                  href="/va"
                   className="text-navy-300 hover:text-white transition-colors text-sm"
                 >
-                  Nosotros
+                  VA
                 </Link>
               </li>
               <li>
