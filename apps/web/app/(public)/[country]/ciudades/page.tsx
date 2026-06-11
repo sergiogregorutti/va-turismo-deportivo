@@ -1,15 +1,35 @@
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { cities } from "@/data/cities";
+import { getCitiesByCountry } from "@/data/cities";
+import { countryLabel, isCountrySlug } from "@/lib/country";
 
-export const metadata: Metadata = {
-  title: "Ciudades | VA Turismo Deportivo",
-  description:
-    "Descubrí los destinos más icónicos del turismo deportivo en Argentina: Buenos Aires, Bariloche, Mendoza y El Chaltén.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ country: string }>;
+}): Promise<Metadata> {
+  const { country } = await params;
+  if (!isCountrySlug(country)) return { title: "Ciudades" };
+  const names = getCitiesByCountry(country)
+    .map((c) => c.name)
+    .join(", ");
+  return {
+    title: "Ciudades | VA Turismo Deportivo",
+    description: `Descubrí los destinos más icónicos del turismo deportivo en ${countryLabel(country)}: ${names}.`,
+  };
+}
 
-export default function CitiesPage() {
+export default async function CitiesPage({
+  params,
+}: {
+  params: Promise<{ country: string }>;
+}) {
+  const { country } = await params;
+  if (!isCountrySlug(country)) notFound();
+  const countryCities = getCitiesByCountry(country);
+
   return (
     <div className="bg-white">
       <section className="bg-navy-700 py-20">
@@ -18,7 +38,8 @@ export default function CitiesPage() {
             Ciudades
           </h1>
           <p className="text-navy-200 max-w-2xl mx-auto">
-            Los destinos más icónicos del turismo deportivo en Argentina
+            Los destinos más icónicos del turismo deportivo en{" "}
+            {countryLabel(country)}
           </p>
         </div>
       </section>
@@ -26,10 +47,10 @@ export default function CitiesPage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {cities.map((city) => (
+            {countryCities.map((city) => (
               <Link
                 key={city.slug}
-                href={`/ciudades/${city.slug}`}
+                href={`/${country}/ciudades/${city.slug}`}
                 className="group block"
               >
                 <div className="relative aspect-[16/10] rounded-2xl overflow-hidden shadow-sm">

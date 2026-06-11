@@ -1,40 +1,51 @@
 import { prisma } from "@/lib/prisma";
+import { notFound } from "next/navigation";
 import { ExperienceCard } from "@/components/shared/ExperienceCard";
 import { ExperienciasFilterBar } from "@/components/shared/ExperienciasFilterBar";
-import { Country, City, Modality, Formato, Prisma } from "@prisma/client";
+import { City, Modality, Formato, Prisma } from "@prisma/client";
+import { countryFromSlug, countryLabel, isCountrySlug } from "@/lib/country";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Experiencias",
-  description:
-    "Descubri las mejores experiencias de turismo deportivo en Argentina y Venezuela",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ country: string }>;
+}): Promise<Metadata> {
+  const { country } = await params;
+  if (!isCountrySlug(country)) return { title: "Experiencias" };
+  return {
+    title: "Experiencias",
+    description: `Descubri las mejores experiencias de turismo deportivo en ${countryLabel(country)}`,
+  };
+}
 
 export default async function ExperienciasPage({
+  params,
   searchParams,
 }: {
+  params: Promise<{ country: string }>;
   searchParams: Promise<{ [key: string]: string | undefined }>;
 }) {
-  const params = await searchParams;
-  const country = params.country as Country | undefined;
-  const modality = params.modality as Modality | undefined;
-  const discipline = params.discipline;
-  const formato = params.formato as Formato | undefined;
-  const destino = params.destino;
-  const month = params.month;
+  const { country: countrySlug } = await params;
+  if (!isCountrySlug(countrySlug)) notFound();
+  const siteCountry = countryFromSlug(countrySlug);
 
-  const where: Prisma.ExperienceWhereInput = { published: true };
+  const filterParams = await searchParams;
+  const modality = filterParams.modality as Modality | undefined;
+  const discipline = filterParams.discipline;
+  const formato = filterParams.formato as Formato | undefined;
+  const destino = filterParams.destino;
+  const month = filterParams.month;
 
-  if (destino) {
-    if (destino.includes(":")) {
-      const [countryPart, cityPart] = destino.split(":");
-      where.country = countryPart as Country;
-      where.city = cityPart as City;
-    } else {
-      where.country = destino as Country;
-    }
-  } else if (country) {
-    where.country = country;
+  // The site country always applies; "destino" can only narrow down to a city
+  const where: Prisma.ExperienceWhereInput = {
+    published: true,
+    country: siteCountry,
+  };
+
+  if (destino && destino.includes(":")) {
+    const [, cityPart] = destino.split(":");
+    where.city = cityPart as City;
   }
 
   if (modality) where.modality = modality;
@@ -53,7 +64,7 @@ export default async function ExperienciasPage({
   });
 
   // Pass initial filter values from URL to the client component
-  const initialDestino = destino || (country ? country : undefined);
+  const initialDestino = destino;
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -64,13 +75,15 @@ export default async function ExperienciasPage({
             Experiencias
           </h1>
           <p className="text-navy-200 max-w-2xl mx-auto">
-            Encontra tu proxima aventura deportiva en Argentina y Venezuela
+            Encontra tu proxima aventura deportiva en{" "}
+            {countryLabel(countrySlug)}
           </p>
         </div>
       </section>
 
       {/* Filters */}
       <ExperienciasFilterBar
+        country={countrySlug}
         initialDestino={initialDestino}
         initialFormato={formato}
         initialModality={modality}
@@ -104,7 +117,7 @@ export default async function ExperienciasPage({
                 Proba con otros filtros o explora todas las experiencias
               </p>
               <a
-                href="/experiencias"
+                href={`/${countrySlug}/experiencias`}
                 className="inline-block bg-gold-400 hover:bg-gold-500 text-navy-900 font-semibold px-6 py-3 rounded-lg transition-colors cursor-pointer"
               >
                 Ver todas

@@ -1,3 +1,5 @@
+import type { CountrySlug } from "@/lib/country";
+
 export interface CityHighlight {
   title: string;
   description: string;
@@ -8,6 +10,7 @@ export interface City {
   name: string;
   province: string;
   country: string;
+  countrySlug: CountrySlug;
   image: string;
   tagline: string;
   intro: string;
@@ -25,6 +28,7 @@ export const cities: City[] = [
     name: "Buenos Aires",
     province: "Ciudad Autónoma de Buenos Aires",
     country: "Argentina",
+    countrySlug: "argentina",
     image: "/images/destinos/Buenos Aires/Destino Buenos Aires.png",
     tagline: "La capital del fútbol y la pasión deportiva",
     intro:
@@ -65,6 +69,7 @@ export const cities: City[] = [
     name: "Bariloche",
     province: "Río Negro",
     country: "Argentina",
+    countrySlug: "argentina",
     image: "/images/destinos/Bariloche/Destino Bariloche.png",
     tagline: "El corazón de la Patagonia deportiva",
     intro:
@@ -105,6 +110,7 @@ export const cities: City[] = [
     name: "Mendoza",
     province: "Mendoza",
     country: "Argentina",
+    countrySlug: "argentina",
     image: "/images/destinos/Mendoza/Destino Mendoza.png",
     tagline: "Deporte, vino y el Aconcagua de telón de fondo",
     intro:
@@ -145,6 +151,7 @@ export const cities: City[] = [
     name: "El Chaltén",
     province: "Santa Cruz",
     country: "Argentina",
+    countrySlug: "argentina",
     image: "/images/destinos/El Chalten/Destino Chalten.png",
     tagline: "La catedral del trekking en la Patagonia",
     intro:
@@ -180,8 +187,138 @@ export const cities: City[] = [
     gettingThere:
       "Aeropuerto de El Calafate (FTE) + 3 hs de traslado terrestre a El Chaltén. Vuelos diarios desde Buenos Aires.",
   },
+  {
+    slug: "los-roques",
+    name: "Los Roques",
+    province: "Dependencias Federales",
+    country: "Venezuela",
+    countrySlug: "venezuela",
+    image:
+      "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1600",
+    tagline: "El paraíso caribeño de los deportes náuticos",
+    intro:
+      "Un archipiélago de más de 300 cayos e islas con aguas turquesas y arenas blancas. Los Roques es uno de los mejores destinos del mundo para kitesurf, pesca con mosca de macabí, buceo y vela en un parque nacional protegido.",
+    about:
+      "El Parque Nacional Archipiélago Los Roques es un santuario natural del Caribe venezolano. Sus lagunas de aguas cristalinas y vientos constantes lo convierten en un spot de clase mundial para kitesurf y windsurf, especialmente entre enero y agosto. Los flats de arena blanca atraen a pescadores con mosca de todo el planeta en busca del macabí (bonefish). A esto se suman arrecifes de coral para buceo y snorkel, travesías en velero entre cayos y una atmósfera de pueblo pesquero único en Gran Roque.",
+    climate:
+      "Tropical seco y soleado todo el año, con temperaturas entre 26°C y 32°C. Vientos alisios constantes de diciembre a agosto, ideales para deportes de vela.",
+    bestSeasons: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto"],
+    sports: ["Kitesurf", "Windsurf", "Pesca con mosca", "Buceo", "Snorkel", "Vela"],
+    highlights: [
+      {
+        title: "Kitesurf en los cayos",
+        description:
+          "Lagunas planas, vientos constantes y kilómetros de agua turquesa: condiciones de nivel mundial para todos los niveles.",
+      },
+      {
+        title: "Pesca de macabí en los flats",
+        description:
+          "Uno de los mejores destinos del planeta para pesca con mosca de bonefish, con guías locales expertos.",
+      },
+      {
+        title: "Buceo en arrecifes vírgenes",
+        description:
+          "Paredes de coral, pecios y una biodiversidad marina protegida dentro del parque nacional.",
+      },
+      {
+        title: "Travesía en velero entre cayos",
+        description:
+          "Navegar de cayo en cayo, fondear en playas desiertas y vivir el Caribe en estado puro.",
+      },
+    ],
+    gettingThere:
+      "Vuelos desde Caracas (Aeropuerto de Maiquetía) al aeródromo de Gran Roque, en aviones regionales. Aproximadamente 40 minutos de vuelo.",
+  },
+  {
+    slug: "margarita",
+    name: "Margarita",
+    province: "Nueva Esparta",
+    country: "Venezuela",
+    countrySlug: "venezuela",
+    image:
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600",
+    tagline: "La perla del Caribe para el deporte y la playa",
+    intro:
+      "La isla de Margarita combina playas de clase mundial para windsurf y kitesurf con golf, pesca deportiva y una infraestructura turística completa. El Yaque es reconocida como una de las mejores playas de viento del planeta.",
+    about:
+      "Margarita es el destino deportivo más completo del Caribe venezolano. Playa El Yaque, con vientos constantes y agua a la cintura, es un spot legendario para windsurf y kitesurf que recibe riders de todo el mundo. La isla ofrece además campos de golf, pesca deportiva de altura (marlin, atún, dorado), surf en la costa norte y una oferta gastronómica y hotelera que permite combinar deporte con descanso en familia.",
+    climate:
+      "Tropical seco, soleado y ventoso la mayor parte del año, con temperaturas entre 25°C y 33°C. Los vientos más fuertes van de diciembre a julio.",
+    bestSeasons: ["Diciembre", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio"],
+    sports: ["Windsurf", "Kitesurf", "Golf", "Pesca deportiva", "Surf", "Vela"],
+    highlights: [
+      {
+        title: "Windsurf y kite en El Yaque",
+        description:
+          "Una de las playas de viento más famosas del mundo: condiciones perfectas, escuelas y ambiente internacional.",
+      },
+      {
+        title: "Pesca deportiva de altura",
+        description:
+          "Salidas en yate en busca de marlin azul y blanco, pez vela, atún y dorado en aguas caribeñas.",
+      },
+      {
+        title: "Golf frente al mar",
+        description:
+          "Campos de golf con vistas al Caribe para combinar deporte y relax en un mismo viaje.",
+      },
+      {
+        title: "Surf en Playa Parguito",
+        description:
+          "Las mejores olas de la isla en la costa norte, con escuelas y alquiler de tablas.",
+      },
+    ],
+    gettingThere:
+      "Aeropuerto Internacional del Caribe Santiago Mariño (PMV), con vuelos desde Caracas y conexiones internacionales. También ferry desde Puerto La Cruz y Cumaná.",
+  },
+  {
+    slug: "la-gran-sabana",
+    name: "La Gran Sabana",
+    province: "Bolívar",
+    country: "Venezuela",
+    countrySlug: "venezuela",
+    image:
+      "https://images.unsplash.com/photo-1489549132488-d00b7eee80f1?w=1600",
+    tagline: "Aventura entre tepuyes y saltos de agua milenarios",
+    intro:
+      "Un paisaje único en el planeta: mesetas de roca de dos mil millones de años, saltos de agua infinitos y sabanas abiertas. La Gran Sabana es el escenario de trekking, expediciones al Roraima y aventura 4x4 en el Parque Nacional Canaima.",
+    about:
+      "La Gran Sabana, dentro del Parque Nacional Canaima (Patrimonio de la Humanidad UNESCO), es uno de los destinos de aventura más impactantes de Sudamérica. El trekking al Monte Roraima —el tepuy que inspiró 'El Mundo Perdido'— es una expedición mítica de 6 a 8 días entre paisajes de otro planeta. La región ofrece además rutas 4x4 entre saltos de agua como Kamá Merú y Aponwao, kayak en ríos de aguas rojizas, y la posibilidad de sobrevolar el Salto Ángel, la caída de agua más alta del mundo.",
+    climate:
+      "Tropical de altura: días cálidos y noches frescas. Temporada seca de diciembre a abril (ideal para trekking), temporada de lluvias de mayo a noviembre (saltos en su máximo caudal).",
+    bestSeasons: ["Diciembre", "Enero", "Febrero", "Marzo", "Abril"],
+    sports: ["Trekking", "Montañismo", "4x4 Adventure", "Kayak", "Ciclismo de montaña"],
+    highlights: [
+      {
+        title: "Expedición al Monte Roraima",
+        description:
+          "Trekking de 6 a 8 días a la cima del tepuy más famoso del mundo, entre formaciones rocosas de otro planeta.",
+      },
+      {
+        title: "Sobrevuelo del Salto Ángel",
+        description:
+          "La caída de agua más alta del mundo (979 m) vista desde el aire, una experiencia que corta la respiración.",
+      },
+      {
+        title: "Ruta 4x4 de los saltos",
+        description:
+          "Recorrido por Kamá Merú, Aponwao y las quebradas de jaspe rojo de la sabana.",
+      },
+      {
+        title: "Kayak en aguas de jaspe",
+        description:
+          "Remar en ríos de lecho rojizo único en el mundo, rodeado de tepuyes y sabana infinita.",
+      },
+    ],
+    gettingThere:
+      "Vuelos a Puerto Ordaz (PZO) y traslado terrestre por la Troncal 10 hacia Santa Elena de Uairén. Las expediciones parten desde San Francisco de Yuruaní.",
+  },
 ];
 
 export function getCityBySlug(slug: string): City | undefined {
   return cities.find((c) => c.slug === slug);
+}
+
+export function getCitiesByCountry(countrySlug: CountrySlug): City[] {
+  return cities.filter((c) => c.countrySlug === countrySlug);
 }

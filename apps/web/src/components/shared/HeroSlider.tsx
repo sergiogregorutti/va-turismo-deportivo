@@ -4,17 +4,17 @@ import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 
 const slides = [
-  { src: "/images/home_hero/1.jpg", alt: "Turismo deportivo en Argentina 1" },
-  { src: "/images/home_hero/2.jpg", alt: "Turismo deportivo en Argentina 2" },
-  { src: "/images/home_hero/3.jpg", alt: "Turismo deportivo en Argentina 3" },
-  { src: "/images/home_hero/4.jpg", alt: "Turismo deportivo en Argentina 4" },
-  { src: "/images/home_hero/5.jpg", alt: "Turismo deportivo en Argentina 5" },
-  { src: "/images/home_hero/6.jpg", alt: "Turismo deportivo en Argentina 6" },
+  { src: "/images/home_hero/1.jpg", alt: "Turismo deportivo 1" },
+  { src: "/images/home_hero/2.jpg", alt: "Turismo deportivo 2" },
+  { src: "/images/home_hero/3.jpg", alt: "Turismo deportivo 3" },
+  { src: "/images/home_hero/4.jpg", alt: "Turismo deportivo 4" },
+  { src: "/images/home_hero/5.jpg", alt: "Turismo deportivo 5" },
+  { src: "/images/home_hero/6.jpg", alt: "Turismo deportivo 6" },
 ];
 
 const INTERVAL = 5000;
 
-export function HeroSlider() {
+export function HeroSlider({ countryName }: { countryName: string }) {
   const [current, setCurrent] = useState(0);
 
   const next = useCallback(() => {
@@ -56,7 +56,7 @@ export function HeroSlider() {
           <h1 className="font-heading text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight leading-none text-white">
             Viví la pasión
             <br />
-            <span className="text-gold-400">de Argentina</span>
+            <span className="text-gold-400">de {countryName}</span>
             <br />
             a través del deporte
           </h1>

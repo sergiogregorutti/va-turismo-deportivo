@@ -3,8 +3,10 @@
 import { Select } from "@/components/ui/Select";
 import { useFilterOptions } from "@/hooks/useFilterOptions";
 import { FormatoInfoPopover } from "@/components/shared/FormatoInfoPopover";
+import { countryFromSlug, type CountrySlug } from "@/lib/country";
 
 interface ExperienciasFilterBarProps {
+  country: CountrySlug;
   initialDestino?: string;
   initialFormato?: string;
   initialModality?: string;
@@ -13,26 +15,30 @@ interface ExperienciasFilterBarProps {
 }
 
 export function ExperienciasFilterBar({
+  country,
   initialDestino,
   initialFormato,
   initialModality,
   initialDiscipline,
   initialMonth,
 }: ExperienciasFilterBarProps) {
-  const { filters, options, setFilter, activeFilterLabels } = useFilterOptions({
-    destino: initialDestino || "",
-    formato: initialFormato || "",
-    modality: initialModality || "",
-    discipline: initialDiscipline || "",
-    month: initialMonth || "",
-  });
+  const { filters, options, setFilter, activeFilterLabels } = useFilterOptions(
+    countryFromSlug(country),
+    {
+      destino: initialDestino || "",
+      formato: initialFormato || "",
+      modality: initialModality || "",
+      discipline: initialDiscipline || "",
+      month: initialMonth || "",
+    }
+  );
 
   const hasFilters = activeFilterLabels.length > 0;
 
   return (
     <section className="bg-white border-b border-gray-100 py-6">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <form action="/experiencias" method="GET">
+        <form action={`/${country}/experiencias`} method="GET">
           <div className="grid grid-cols-1 sm:grid-cols-7 gap-4 items-end">
             <Select
               name="destino"
@@ -84,7 +90,7 @@ export function ExperienciasFilterBar({
               </button>
               {hasFilters && (
                 <a
-                  href="/experiencias"
+                  href={`/${country}/experiencias`}
                   className="px-4 py-3 border border-gray-200 rounded-lg text-gray-500 hover:bg-gray-50 transition-colors cursor-pointer whitespace-nowrap"
                 >
                   Limpiar

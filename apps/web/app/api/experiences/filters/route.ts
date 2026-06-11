@@ -63,6 +63,7 @@ function parseDestino(destino: string | null) {
 
 function buildWhere(
   params: {
+    country?: string | null;
     destino?: string | null;
     formato?: string | null;
     modality?: string | null;
@@ -72,6 +73,11 @@ function buildWhere(
   exclude?: string
 ): Prisma.ExperienceWhereInput {
   const where: Prisma.ExperienceWhereInput = { published: true };
+
+  // The site country always applies and is never excludable
+  if (params.country) {
+    where.country = params.country as Country;
+  }
 
   if (exclude !== "destino" && params.destino) {
     const { country, city } = parseDestino(params.destino);
@@ -106,6 +112,7 @@ function buildWhere(
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const params = {
+    country: searchParams.get("country"),
     destino: searchParams.get("destino"),
     formato: searchParams.get("formato"),
     modality: searchParams.get("modality"),
@@ -178,7 +185,11 @@ export async function GET(request: NextRequest) {
       .map((c) => [`${c.country}:${c.city}`, c._count])
   );
 
-  const destinos = (["ARGENTINA", "VENEZUELA"] as const)
+  const visibleCountries = (["ARGENTINA", "VENEZUELA"] as const).filter(
+    (c) => !params.country || c === params.country
+  );
+
+  const destinos = visibleCountries
     .map((country) => {
       const countryCount = countryCountMap.get(country) || 0;
       const cities = Object.entries(cityToCountry)

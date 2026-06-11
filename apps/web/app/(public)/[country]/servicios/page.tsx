@@ -1,18 +1,27 @@
 export const dynamic = "force-dynamic";
 
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import {
   ServiceCarousel,
   type ServiceCarouselItem,
 } from "@/components/shared/ServiceCarousel";
+import { countryFromSlug, countryLabel, isCountrySlug } from "@/lib/country";
 
-export const metadata: Metadata = {
-  title: "Servicios | VA Turismo Deportivo",
-  description:
-    "Hospedajes, transporte y concierge: gestionamos cada detalle de tu experiencia deportiva en Argentina, Venezuela y Latinoamerica.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ country: string }>;
+}): Promise<Metadata> {
+  const { country } = await params;
+  const label = isCountrySlug(country) ? countryLabel(country) : "Latinoamerica";
+  return {
+    title: "Servicios | VA Turismo Deportivo",
+    description: `Hospedajes, transporte y concierge: gestionamos cada detalle de tu experiencia deportiva en ${label} y Latinoamerica.`,
+  };
+}
 
 const TRANSPORTE: ServiceCarouselItem[] = [
   {
@@ -101,9 +110,17 @@ function truncate(text: string, max = 140) {
   return text.slice(0, max).trimEnd() + "...";
 }
 
-export default async function ServiciosPage() {
+export default async function ServiciosPage({
+  params,
+}: {
+  params: Promise<{ country: string }>;
+}) {
+  const { country } = await params;
+  if (!isCountrySlug(country)) notFound();
+  const base = `/${country}`;
+
   const hospedajes = await prisma.hospedaje.findMany({
-    where: { published: true },
+    where: { published: true, country: countryFromSlug(country) },
     orderBy: { createdAt: "desc" },
   });
 
@@ -111,7 +128,7 @@ export default async function ServiciosPage() {
     title: h.title,
     description: truncate(h.description),
     imageUrl: h.imageUrls[0] ?? "",
-    href: `/hospedajes/${h.slug}`,
+    href: `${base}/hospedajes/${h.slug}`,
     badge: h.city ? h.city.replace(/_/g, " ") : undefined,
   }));
 
@@ -145,7 +162,7 @@ export default async function ServiciosPage() {
             </div>
             {hospedajeItems.length > 0 && (
               <Link
-                href="/hospedajes"
+                href={`${base}/hospedajes`}
                 className="hidden sm:inline-block text-sm font-semibold text-navy-700 hover:text-gold-500 transition-colors"
               >
                 Ver todos →
@@ -210,7 +227,7 @@ export default async function ServiciosPage() {
             propuesta a medida con todos los servicios incluidos.
           </p>
           <Link
-            href="/contacto"
+            href={`${base}/contacto`}
             className="inline-block bg-gold-400 hover:bg-gold-500 text-navy-900 font-semibold px-8 py-4 rounded-xl transition-colors"
           >
             Consulta tu viaje

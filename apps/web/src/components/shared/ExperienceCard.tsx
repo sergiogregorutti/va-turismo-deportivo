@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Experience, Discipline } from "@prisma/client";
+import { slugFromCountry } from "@/lib/country";
 
 const modalityLabels: Record<string, string> = {
   PRACTICAR: "Practicar",
@@ -24,7 +25,9 @@ export function ExperienceCard({
 }) {
   const imageUrl = experience.imageUrls[0];
   const isExternal = !!experience.externalUrl;
-  const href = experience.externalUrl ?? `/experiencias/${experience.slug}`;
+  const href =
+    experience.externalUrl ??
+    `/${slugFromCountry(experience.country)}/experiencias/${experience.slug}`;
 
   return (
     <Link

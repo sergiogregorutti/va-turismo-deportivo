@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { getWhatsAppUrl } from "@/lib/utils";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 import { ExperienceCard } from "@/components/shared/ExperienceCard";
+import { COUNTRY_SLUGS, countryFromSlug, isCountrySlug } from "@/lib/country";
 import type { Metadata } from "next";
 import type { Modality } from "@prisma/client";
 
@@ -136,13 +137,15 @@ const MODALITY_DATA: Record<
 const VALID_MODALITIES = Object.keys(MODALITY_DATA);
 
 export function generateStaticParams() {
-  return VALID_MODALITIES.map((modality) => ({ modality }));
+  return COUNTRY_SLUGS.flatMap((country) =>
+    VALID_MODALITIES.map((modality) => ({ country, modality }))
+  );
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ modality: string }>;
+  params: Promise<{ country: string; modality: string }>;
 }): Promise<Metadata> {
   const { modality } = await params;
   const data = MODALITY_DATA[modality];
@@ -157,25 +160,37 @@ export async function generateMetadata({
 export default async function ModalityPage({
   params,
 }: {
-  params: Promise<{ modality: string }>;
+  params: Promise<{ country: string; modality: string }>;
 }) {
-  const { modality } = await params;
+  const { country, modality } = await params;
+  if (!isCountrySlug(country)) notFound();
   const data = MODALITY_DATA[modality];
 
   if (!data) notFound();
+
+  const countryEnum = countryFromSlug(country);
+  const base = `/${country}`;
 
   const [disciplines, experiences] = await Promise.all([
     prisma.discipline.findMany({
       where: {
         modalities: { has: data.prismaModality },
         experiences: {
-          some: { published: true, modality: data.prismaModality },
+          some: {
+            published: true,
+            modality: data.prismaModality,
+            country: countryEnum,
+          },
         },
       },
       orderBy: { name: "asc" },
     }),
     prisma.experience.findMany({
-      where: { published: true, modality: data.prismaModality },
+      where: {
+        published: true,
+        modality: data.prismaModality,
+        country: countryEnum,
+      },
       include: { discipline: true },
       take: 6,
       orderBy: { createdAt: "desc" },
@@ -189,7 +204,7 @@ export default async function ModalityPage({
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {/* Breadcrumbs */}
           <nav className="flex items-center gap-2 text-sm text-navy-300 mb-6">
-            <Link href="/" className="hover:text-white transition-colors">
+            <Link href={base} className="hover:text-white transition-colors">
               Inicio
             </Link>
             <span>/</span>
@@ -261,7 +276,7 @@ export default async function ModalityPage({
               {disciplines.map((discipline) => (
                 <Link
                   key={discipline.id}
-                  href={`/experiencias?modality=${data.prismaModality}&discipline=${discipline.slug}`}
+                  href={`${base}/experiencias?modality=${data.prismaModality}&discipline=${discipline.slug}`}
                   className="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-lg hover:border-gold-400/50 transition-all duration-300"
                 >
                   <div className="relative h-40 bg-navy-100">
@@ -311,7 +326,7 @@ export default async function ModalityPage({
             {/* CTA to filtered experiences */}
             <div className="text-center mt-12">
               <Link
-                href={`/experiencias?modality=${data.prismaModality}`}
+                href={`${base}/experiencias?modality=${data.prismaModality}`}
                 className="inline-block bg-gold-400 hover:bg-gold-500 text-navy-900 font-semibold px-8 py-4 rounded-xl transition-colors"
               >
                 {data.ctaLabel}
@@ -326,7 +341,7 @@ export default async function ModalityPage({
         <section className="py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
             <Link
-              href={`/experiencias?modality=${data.prismaModality}`}
+              href={`${base}/experiencias?modality=${data.prismaModality}`}
               className="inline-block bg-gold-400 hover:bg-gold-500 text-navy-900 font-semibold px-8 py-4 rounded-xl transition-colors"
             >
               {data.ctaLabel}

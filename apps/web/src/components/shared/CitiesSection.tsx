@@ -1,8 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { cities } from "@/data/cities";
+import { getCitiesByCountry } from "@/data/cities";
+import { countryLabel, type CountrySlug } from "@/lib/country";
 
-export function CitiesSection() {
+export function CitiesSection({ country }: { country: CountrySlug }) {
+  const countryCities = getCitiesByCountry(country);
+
+  if (countryCities.length === 0) return null;
+
   return (
     <section className="bg-white py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -12,12 +17,12 @@ export function CitiesSection() {
               Ciudades
             </h2>
             <p className="text-gray-500 mt-3 max-w-2xl">
-              Descubrí los destinos más icónicos del turismo deportivo en
-              Argentina
+              Descubrí los destinos más icónicos del turismo deportivo en{" "}
+              {countryLabel(country)}
             </p>
           </div>
           <Link
-            href="/ciudades"
+            href={`/${country}/ciudades`}
             className="inline-flex items-center gap-2 text-navy-700 hover:text-gold-500 font-semibold text-sm transition-colors"
           >
             Ver todas las ciudades
@@ -38,10 +43,10 @@ export function CitiesSection() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {cities.map((city) => (
+          {countryCities.map((city) => (
             <Link
               key={city.slug}
-              href={`/ciudades/${city.slug}`}
+              href={`/${country}/ciudades/${city.slug}`}
               className="group block"
             >
               <div className="relative aspect-[3/4] rounded-xl overflow-hidden shadow-sm">

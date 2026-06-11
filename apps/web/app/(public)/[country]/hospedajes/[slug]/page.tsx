@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getWhatsAppUrl } from "@/lib/utils";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 import { HospedajeCard } from "@/components/shared/HospedajeCard";
+import { isCountrySlug, slugFromCountry } from "@/lib/country";
 import type { Metadata } from "next";
 
 const countryLabels: Record<string, string> = {
@@ -38,9 +39,10 @@ export async function generateMetadata({
 export default async function HospedajeDetailPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ country: string; slug: string }>;
 }) {
-  const { slug } = await params;
+  const { country, slug } = await params;
+  if (!isCountrySlug(country)) notFound();
 
   const hospedaje = await prisma.hospedaje.findUnique({
     where: { slug, published: true },
@@ -48,9 +50,16 @@ export default async function HospedajeDetailPage({
 
   if (!hospedaje) notFound();
 
+  // If the URL country does not match the hospedaje, send to the correct URL
+  const ownCountry = slugFromCountry(hospedaje.country);
+  if (ownCountry !== country) {
+    redirect(`/${ownCountry}/hospedajes/${hospedaje.slug}`);
+  }
+
   const relatedHospedajes = await prisma.hospedaje.findMany({
     where: {
       published: true,
+      country: hospedaje.country,
       id: { not: hospedaje.id },
     },
     take: 3,
@@ -77,12 +86,15 @@ export default async function HospedajeDetailPage({
           <div className="max-w-7xl mx-auto">
             {/* Breadcrumbs */}
             <nav className="flex items-center gap-2 text-sm text-white/70 mb-4 flex-wrap">
-              <Link href="/" className="hover:text-white transition-colors">
+              <Link
+                href={`/${country}`}
+                className="hover:text-white transition-colors"
+              >
                 Inicio
               </Link>
               <span>/</span>
               <Link
-                href="/hospedajes"
+                href={`/${country}/hospedajes`}
                 className="hover:text-white transition-colors"
               >
                 Hospedaje

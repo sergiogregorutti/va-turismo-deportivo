@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { formatDate, getWhatsAppUrl } from "@/lib/utils";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 import { ExperienceCard } from "@/components/shared/ExperienceCard";
+import { isCountrySlug, slugFromCountry } from "@/lib/country";
 import type { Metadata } from "next";
 
 const countryLabels: Record<string, string> = {
@@ -45,9 +46,10 @@ export async function generateMetadata({
 export default async function ExperienceDetailPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ country: string; slug: string }>;
 }) {
-  const { slug } = await params;
+  const { country, slug } = await params;
+  if (!isCountrySlug(country)) notFound();
 
   const experience = await prisma.experience.findUnique({
     where: { slug, published: true },
@@ -56,9 +58,16 @@ export default async function ExperienceDetailPage({
 
   if (!experience) notFound();
 
+  // If the URL country does not match the experience, send to the correct URL
+  const ownCountry = slugFromCountry(experience.country);
+  if (ownCountry !== country) {
+    redirect(`/${ownCountry}/experiencias/${experience.slug}`);
+  }
+
   const relatedExperiences = await prisma.experience.findMany({
     where: {
       published: true,
+      country: experience.country,
       id: { not: experience.id },
       OR: [
         { disciplineId: experience.disciplineId },
@@ -90,19 +99,22 @@ export default async function ExperienceDetailPage({
           <div className="max-w-7xl mx-auto">
             {/* Breadcrumbs */}
             <nav className="flex items-center gap-2 text-sm text-white/70 mb-4 flex-wrap">
-              <Link href="/" className="hover:text-white transition-colors">
+              <Link
+                href={`/${country}`}
+                className="hover:text-white transition-colors"
+              >
                 Inicio
               </Link>
               <span>/</span>
               <Link
-                href="/experiencias"
+                href={`/${country}/experiencias`}
                 className="hover:text-white transition-colors"
               >
                 Experiencias
               </Link>
               <span>/</span>
               <Link
-                href={`/experiencias?discipline=${experience.discipline.slug}`}
+                href={`/${country}/experiencias?discipline=${experience.discipline.slug}`}
                 className="hover:text-white transition-colors"
               >
                 {experience.discipline.name}

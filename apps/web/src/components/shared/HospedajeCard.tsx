@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Hospedaje } from "@prisma/client";
+import { slugFromCountry } from "@/lib/country";
 
 const countryLabels: Record<string, string> = {
   ARGENTINA: "Argentina",
@@ -12,7 +13,7 @@ export function HospedajeCard({ hospedaje }: { hospedaje: Hospedaje }) {
 
   return (
     <Link
-      href={`/hospedajes/${hospedaje.slug}`}
+      href={`/${slugFromCountry(hospedaje.country)}/hospedajes/${hospedaje.slug}`}
       className="group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300"
     >
       <div className="relative h-56 overflow-hidden">

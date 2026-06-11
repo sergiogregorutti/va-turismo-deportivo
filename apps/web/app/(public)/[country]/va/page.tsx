@@ -43,7 +43,12 @@ const formatos = [
   },
 ];
 
-export default function VAPage() {
+export default async function VAPage({
+  params,
+}: {
+  params: Promise<{ country: string }>;
+}) {
+  const { country } = await params;
   return (
     <div className="bg-gray-50 min-h-screen">
       {/* Hero */}
@@ -184,7 +189,7 @@ export default function VAPage() {
 
               <div className="text-center lg:text-left">
                 <Link
-                  href="/contacto"
+                  href={`/${country}/contacto`}
                   className="inline-block bg-gold-400 hover:bg-gold-500 text-navy-900 font-semibold px-8 py-4 rounded-xl transition-colors"
                 >
                   Contactanos

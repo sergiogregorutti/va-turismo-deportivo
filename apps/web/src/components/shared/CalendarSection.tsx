@@ -108,7 +108,11 @@ export function CalendarSection({ experiences }: CalendarSectionProps) {
                     const end = exp.endDate ? new Date(exp.endDate) : null;
                     const imageUrl = exp.imageUrls?.[0];
                     const isExternal = !!exp.externalUrl;
-                    const href = exp.externalUrl ?? `/experiencias/${exp.slug}`;
+                    const countrySlug =
+                      exp.country === "VENEZUELA" ? "venezuela" : "argentina";
+                    const href =
+                      exp.externalUrl ??
+                      `/${countrySlug}/experiencias/${exp.slug}`;
 
                     return (
                       <Link

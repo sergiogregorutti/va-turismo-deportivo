@@ -1,16 +1,32 @@
 import { prisma } from "@/lib/prisma";
+import { notFound } from "next/navigation";
 import { HospedajeCard } from "@/components/shared/HospedajeCard";
+import { countryFromSlug, countryLabel, isCountrySlug } from "@/lib/country";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Hospedaje",
-  description:
-    "Descubri los mejores hospedajes tematicos deportivos en Argentina y Venezuela",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ country: string }>;
+}): Promise<Metadata> {
+  const { country } = await params;
+  if (!isCountrySlug(country)) return { title: "Hospedaje" };
+  return {
+    title: "Hospedaje",
+    description: `Descubri los mejores hospedajes tematicos deportivos en ${countryLabel(country)}`,
+  };
+}
 
-export default async function HospedajesPage() {
+export default async function HospedajesPage({
+  params,
+}: {
+  params: Promise<{ country: string }>;
+}) {
+  const { country } = await params;
+  if (!isCountrySlug(country)) notFound();
+
   const hospedajes = await prisma.hospedaje.findMany({
-    where: { published: true },
+    where: { published: true, country: countryFromSlug(country) },
     orderBy: { createdAt: "desc" },
   });
 

@@ -1,19 +1,20 @@
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
-import { cities, getCityBySlug } from "@/data/cities";
+import { cities, getCityBySlug, getCitiesByCountry } from "@/data/cities";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 import { getWhatsAppUrl } from "@/lib/utils";
+import { isCountrySlug } from "@/lib/country";
 
 export function generateStaticParams() {
-  return cities.map((c) => ({ slug: c.slug }));
+  return cities.map((c) => ({ country: c.countrySlug, slug: c.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ country: string; slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
   const city = getCityBySlug(slug);
@@ -27,13 +28,21 @@ export async function generateMetadata({
 export default async function CityPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ country: string; slug: string }>;
 }) {
-  const { slug } = await params;
+  const { country, slug } = await params;
+  if (!isCountrySlug(country)) notFound();
   const city = getCityBySlug(slug);
   if (!city) notFound();
 
-  const otherCities = cities.filter((c) => c.slug !== city.slug);
+  // If the URL country does not match the city, send to the correct URL
+  if (city.countrySlug !== country) {
+    redirect(`/${city.countrySlug}/ciudades/${city.slug}`);
+  }
+
+  const otherCities = getCitiesByCountry(country).filter(
+    (c) => c.slug !== city.slug
+  );
 
   return (
     <div className="bg-white">
@@ -51,7 +60,7 @@ export default async function CityPage({
         <div className="relative z-10 h-full flex items-end">
           <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 pb-12">
             <Link
-              href="/ciudades"
+              href={`/${country}/ciudades`}
               className="inline-flex items-center gap-2 text-white/80 hover:text-white text-sm mb-4 transition-colors"
             >
               <svg
@@ -214,7 +223,7 @@ export default async function CityPage({
             {otherCities.map((c) => (
               <Link
                 key={c.slug}
-                href={`/ciudades/${c.slug}`}
+                href={`/${country}/ciudades/${c.slug}`}
                 className="group block"
               >
                 <div className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-sm">

@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { HeroSlider } from "@/components/shared/HeroSlider";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
@@ -11,34 +12,45 @@ import { CalendarSection } from "@/components/shared/CalendarSection";
 import { CitiesSection } from "@/components/shared/CitiesSection";
 import { TriadaCards, type TriadaItem } from "@/components/shared/TriadaCards";
 import { AliadosMarquee } from "@/components/shared/AliadosMarquee";
+import { countryFromSlug, countryLabel, isCountrySlug } from "@/lib/country";
 
-const triada: TriadaItem[] = [
+const triada = (base: string): TriadaItem[] => [
   {
     title: "Practicar",
     description: "Perfeccionar la tecnica",
     detail: "Esqui | Buceo | Surf | Kite | Golf",
-    href: "/practicar",
+    href: `${base}/practicar`,
     gradient: "from-blue-900/80 to-blue-700/60",
   },
   {
     title: "Participar",
     description: "Desafiar los limites",
     detail: "Maraton | Triatlon | Trekking",
-    href: "/participar",
+    href: `${base}/participar`,
     gradient: "from-amber-900/80 to-amber-700/60",
   },
   {
     title: "Presenciar",
     description: "Vivir la pasion",
     detail: "Futbol | Polo | Tenis",
-    href: "/presenciar",
+    href: `${base}/presenciar`,
     gradient: "from-green-900/80 to-green-700/60",
   },
 ];
 
-export default async function HomePage() {
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ country: string }>;
+}) {
+  const { country } = await params;
+  if (!isCountrySlug(country)) notFound();
+
+  const countryEnum = countryFromSlug(country);
+  const base = `/${country}`;
+
   const featuredExperiences = await prisma.experience.findMany({
-    where: { published: true, featured: true },
+    where: { published: true, featured: true, country: countryEnum },
     include: { discipline: true },
     take: 6,
     orderBy: { createdAt: "desc" },
@@ -47,6 +59,7 @@ export default async function HomePage() {
   const upcomingExperiences = await prisma.experience.findMany({
     where: {
       published: true,
+      country: countryEnum,
       startDate: { gte: new Date() },
     },
     include: { discipline: true },
@@ -57,10 +70,10 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <HeroSlider />
+      <HeroSlider countryName={countryLabel(country)} />
 
       {/* Search Bar */}
-      <SearchBar />
+      <SearchBar country={country} />
 
       {/* La Triada */}
       <section className="bg-navy-800 py-20">
@@ -72,7 +85,7 @@ export default async function HomePage() {
             Tres formas de vivir el deporte. Elegí la tuya.
           </p>
 
-          <TriadaCards items={triada} />
+          <TriadaCards items={triada(base)} />
         </div>
       </section>
 
@@ -91,7 +104,7 @@ export default async function HomePage() {
 
             <div className="text-center mt-12">
               <Link
-                href="/experiencias"
+                href={`${base}/experiencias`}
                 className="inline-block bg-navy-700 hover:bg-navy-800 text-white font-semibold px-8 py-4 rounded-xl transition-colors"
               >
                 Ver todas las experiencias
@@ -102,7 +115,7 @@ export default async function HomePage() {
       )}
 
       {/* Cities */}
-      <CitiesSection />
+      <CitiesSection country={country} />
 
       {/* Calendar */}
       <CalendarSection experiences={upcomingExperiences} />

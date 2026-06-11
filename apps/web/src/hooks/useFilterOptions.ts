@@ -53,7 +53,10 @@ function stripCount(label: string): string {
   return label.replace(/\s*\(\d+\)$/, "");
 }
 
-export function useFilterOptions(initialValues?: Partial<FilterValues>) {
+export function useFilterOptions(
+  country?: string,
+  initialValues?: Partial<FilterValues>
+) {
   const [filters, setFilters] = useState<FilterValues>({
     destino: initialValues?.destino || "",
     formato: initialValues?.formato || "",
@@ -71,6 +74,7 @@ export function useFilterOptions(initialValues?: Partial<FilterValues>) {
     abortRef.current = controller;
 
     const params = new URLSearchParams();
+    if (country) params.set("country", country);
     if (currentFilters.destino) params.set("destino", currentFilters.destino);
     if (currentFilters.formato) params.set("formato", currentFilters.formato);
     if (currentFilters.modality) params.set("modality", currentFilters.modality);
@@ -98,7 +102,7 @@ export function useFilterOptions(initialValues?: Partial<FilterValues>) {
     } catch (e) {
       if (e instanceof DOMException && e.name === "AbortError") return;
     }
-  }, []);
+  }, [country]);
 
   useEffect(() => {
     fetchOptions(filters);

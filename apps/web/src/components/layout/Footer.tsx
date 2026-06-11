@@ -2,8 +2,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { WHATSAPP_NUMBER, CONTACT_EMAIL } from "@/lib/constants";
 import { getWhatsAppUrl } from "@/lib/utils";
+import type { CountrySlug } from "@/lib/country";
 
-export function Footer() {
+export function Footer({ country }: { country: CountrySlug }) {
+  const base = `/${country}`;
   return (
     <footer className="bg-navy-800 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
@@ -31,7 +33,7 @@ export function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/"
+                  href={base}
                   className="text-navy-300 hover:text-white transition-colors text-sm"
                 >
                   Inicio
@@ -39,7 +41,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/experiencias"
+                  href={`${base}/experiencias`}
                   className="text-navy-300 hover:text-white transition-colors text-sm"
                 >
                   Experiencias
@@ -47,7 +49,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/servicios"
+                  href={`${base}/servicios`}
                   className="text-navy-300 hover:text-white transition-colors text-sm"
                 >
                   Servicios
@@ -55,7 +57,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/va"
+                  href={`${base}/va`}
                   className="text-navy-300 hover:text-white transition-colors text-sm"
                 >
                   VA
@@ -63,7 +65,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/contacto"
+                  href={`${base}/contacto`}
                   className="text-navy-300 hover:text-white transition-colors text-sm"
                 >
                   Contacto
