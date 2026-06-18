@@ -1,25 +1,23 @@
-type Aliado = {
-  name: string;
-  tag?: string;
-};
-
-const ALIADOS: Aliado[] = [
-  { name: "Sport Premium", tag: "Equipamiento" },
-  { name: "Andes Club", tag: "Hospedaje" },
-  { name: "Patagonia Travel", tag: "Tour Operator" },
-  { name: "BA Sports", tag: "Eventos" },
-  { name: "Latam Hotels", tag: "Hospedaje" },
-  { name: "Aereo Elite", tag: "Transporte" },
-  { name: "Events Pro", tag: "Hospitality" },
-  { name: "Concierge Plus", tag: "Servicios" },
-];
+import Image from "next/image";
+import { prisma } from "@/lib/prisma";
+import type { Aliado } from "@prisma/client";
 
 function AliadoBadge({ aliado }: { aliado: Aliado }) {
   return (
     <div className="shrink-0 flex flex-col items-center justify-center w-48 h-24 rounded-xl border border-gray-200 bg-white px-6 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 hover:border-gold-400 transition-all">
-      <p className="font-heading text-xl font-bold text-navy-700 uppercase tracking-wide leading-none">
-        {aliado.name}
-      </p>
+      {aliado.logoUrl ? (
+        <Image
+          src={aliado.logoUrl}
+          alt={aliado.name}
+          width={160}
+          height={64}
+          className="max-h-14 w-auto object-contain"
+        />
+      ) : (
+        <p className="font-heading text-xl font-bold text-navy-700 uppercase tracking-wide leading-none">
+          {aliado.name}
+        </p>
+      )}
       {aliado.tag && (
         <p className="text-[10px] text-gray-400 uppercase tracking-wider mt-1">
           {aliado.tag}
@@ -29,8 +27,13 @@ function AliadoBadge({ aliado }: { aliado: Aliado }) {
   );
 }
 
-export function AliadosMarquee() {
-  if (ALIADOS.length === 0) return null;
+export async function AliadosMarquee() {
+  const aliados = await prisma.aliado.findMany({
+    where: { published: true },
+    orderBy: { order: "asc" },
+  });
+
+  if (aliados.length === 0) return null;
 
   return (
     <section className="bg-gray-50 py-16 border-y border-gray-100">
@@ -48,11 +51,11 @@ export function AliadosMarquee() {
           className="marquee-track flex gap-6"
           aria-hidden="false"
         >
-          {ALIADOS.map((a, i) => (
-            <AliadoBadge key={`a-${i}`} aliado={a} />
+          {aliados.map((a) => (
+            <AliadoBadge key={`a-${a.id}`} aliado={a} />
           ))}
-          {ALIADOS.map((a, i) => (
-            <AliadoBadge key={`b-${i}`} aliado={a} />
+          {aliados.map((a) => (
+            <AliadoBadge key={`b-${a.id}`} aliado={a} />
           ))}
         </div>
 

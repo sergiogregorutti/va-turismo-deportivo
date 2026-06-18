@@ -1,146 +1,16 @@
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getWhatsAppUrl } from "@/lib/utils";
-import { WHATSAPP_NUMBER } from "@/lib/constants";
+import { getSettings } from "@/lib/settings";
 import { ExperienceCard } from "@/components/shared/ExperienceCard";
-import { COUNTRY_SLUGS, countryFromSlug, isCountrySlug } from "@/lib/country";
+import { countryFromSlug, isCountrySlug } from "@/lib/country";
 import type { Metadata } from "next";
-import type { Modality } from "@prisma/client";
 
-const MODALITY_DATA: Record<
-  string,
-  {
-    title: string;
-    prismaModality: Modality;
-    tagline: string;
-    heroDescription: string;
-    description: string[];
-    highlights: { title: string; text: string }[];
-    gradient: string;
-    ctaLabel: string;
-    whatsappMessage: string;
-    metaDescription: string;
-  }
-> = {
-  practicar: {
-    title: "Practicar",
-    prismaModality: "PRACTICAR",
-    tagline: "Perfeccionar la tecnica",
-    heroDescription:
-      "Experiencias disenadas para quienes quieren aprender, mejorar y dominar una disciplina deportiva con la guia de profesionales.",
-    description: [
-      "Practicar es mucho mas que repetir un movimiento. Es sumergirse en una disciplina deportiva con el objetivo de crecer, mejorar y superar tus propios limites tecnicos. En VA Turismo Deportivo disenamos experiencias que combinan la practica deportiva con destinos increibles, para que cada sesion de entrenamiento sea tambien una aventura.",
-      "Nuestras experiencias de practica incluyen acceso a instalaciones de primer nivel, equipamiento profesional y la guia de instructores y coaches con anos de experiencia. Ya sea que estes dando tus primeros pasos en un deporte o que busques perfeccionar tu tecnica, tenemos la experiencia ideal para vos.",
-      "Imaginate esquiar en las mejores pistas de Bariloche con un instructor dedicado, hacer buceo en aguas cristalinas con guias certificados, o perfeccionar tu swing de golf en campos de clase mundial. Cada experiencia esta pensada para que progreses mientras disfrutas del viaje.",
-    ],
-    highlights: [
-      {
-        title: "Instructores profesionales",
-        text: "Coaches certificados y con experiencia internacional en cada disciplina",
-      },
-      {
-        title: "Instalaciones de primer nivel",
-        text: "Acceso a los mejores centros deportivos y campos de entrenamiento",
-      },
-      {
-        title: "Programas personalizados",
-        text: "Planes adaptados a tu nivel, desde principiante hasta avanzado",
-      },
-      {
-        title: "Destinos unicos",
-        text: "Practicar tu deporte favorito en los escenarios mas espectaculares",
-      },
-    ],
-    gradient: "from-blue-900/80 to-blue-700/60",
-    ctaLabel: "Ver experiencias para Practicar",
-    whatsappMessage:
-      "Hola! Me interesan las experiencias de practica deportiva. Quiero mas informacion.",
-    metaDescription:
-      "Descubri experiencias deportivas para practicar y perfeccionar tu tecnica con instructores profesionales en destinos increibles.",
-  },
-  participar: {
-    title: "Participar",
-    prismaModality: "COMPETIR",
-    tagline: "Desafiar los limites",
-    heroDescription:
-      "Para quienes buscan poner a prueba su preparacion en competencias organizadas, carreras y desafios deportivos alrededor del mundo.",
-    description: [
-      "Participar es la esencia del espiritu deportivo. Es poner a prueba todo lo que entrenaste, superar tus marcas personales y vivir la adrenalina de medirte con otros atletas. En VA Turismo Deportivo organizamos tu experiencia completa para que solo tengas que concentrarte en dar lo mejor de vos.",
-      "Nos encargamos de toda la logistica: inscripcion a la competencia, traslados, alojamiento, y todo lo necesario para que llegues en las mejores condiciones al dia de la carrera o el evento. Ademas, complementamos la experiencia competitiva con actividades turisticas para que conozcas el destino.",
-      "Desde maratones en las grandes ciudades hasta travesias de trekking en la Patagonia, pasando por triatlones y carreras de aventura, tenemos opciones para todos los niveles competitivos. Si tu pasion es desafiarte, nosotros te llevamos.",
-    ],
-    highlights: [
-      {
-        title: "Logistica completa",
-        text: "Inscripcion, traslados, alojamiento y todo resuelto para el dia de la competencia",
-      },
-      {
-        title: "Competencias de primer nivel",
-        text: "Acceso a las mejores carreras y eventos deportivos de Latinoamerica y el mundo",
-      },
-      {
-        title: "Preparacion integral",
-        text: "Asesoramiento sobre entrenamiento previo y condiciones del evento",
-      },
-      {
-        title: "Experiencia completa",
-        text: "Combinamos la competencia con turismo y actividades en el destino",
-      },
-    ],
-    gradient: "from-amber-900/80 to-amber-700/60",
-    ctaLabel: "Ver experiencias para Participar",
-    whatsappMessage:
-      "Hola! Me interesan las experiencias de competencia deportiva. Quiero mas informacion.",
-    metaDescription:
-      "Participa en las mejores competencias deportivas con logistica completa. Maratones, triatlones, trekking y mas.",
-  },
-  presenciar: {
-    title: "Presenciar",
-    prismaModality: "PRESENCIAR",
-    tagline: "Vivir la pasion",
-    heroDescription:
-      "Vivi la emocion de los grandes eventos deportivos como espectador VIP, con acceso exclusivo y experiencias premium.",
-    description: [
-      "Presenciar un evento deportivo en vivo es una experiencia que no se compara con nada. La energia del estadio, la pasion de la hinchada, y la emocion de ver a los mejores atletas del mundo en accion. En VA Turismo Deportivo te acercamos a esos momentos inolvidables con experiencias premium.",
-      "Ofrecemos acceso VIP a los eventos deportivos mas importantes: desde partidos de futbol en los estadios mas emblematicos, hasta jornadas de polo en Palermo y torneos de tenis de nivel internacional. Cada experiencia incluye entradas premium, hospitality, y servicios exclusivos.",
-      "No se trata solo de ver un partido o un evento. Se trata de vivir la experiencia completa: conocer los bastidores, disfrutar de la gastronomia local, compartir con otros apasionados del deporte y llevarte recuerdos que duran toda la vida.",
-    ],
-    highlights: [
-      {
-        title: "Acceso VIP y premium",
-        text: "Entradas preferenciales, palcos y experiencias exclusivas en cada evento",
-      },
-      {
-        title: "Hospitality de primer nivel",
-        text: "Gastronomia, bebidas y atencion personalizada durante el evento",
-      },
-      {
-        title: "Eventos de clase mundial",
-        text: "Futbol, polo, tenis y mas en los escenarios mas importantes",
-      },
-      {
-        title: "Experiencia integral",
-        text: "Combinamos el evento con turismo, gastronomia y cultura del destino",
-      },
-    ],
-    gradient: "from-green-900/80 to-green-700/60",
-    ctaLabel: "Ver experiencias para Presenciar",
-    whatsappMessage:
-      "Hola! Me interesan las experiencias para presenciar eventos deportivos. Quiero mas informacion.",
-    metaDescription:
-      "Vivi los mejores eventos deportivos con acceso VIP. Futbol, polo, tenis y mas con experiencias premium.",
-  },
-};
-
-const VALID_MODALITIES = Object.keys(MODALITY_DATA);
-
-export function generateStaticParams() {
-  return COUNTRY_SLUGS.flatMap((country) =>
-    VALID_MODALITIES.map((modality) => ({ country, modality }))
-  );
-}
+type ModalityHighlight = { title: string; text: string };
 
 export async function generateMetadata({
   params,
@@ -148,7 +18,9 @@ export async function generateMetadata({
   params: Promise<{ country: string; modality: string }>;
 }): Promise<Metadata> {
   const { modality } = await params;
-  const data = MODALITY_DATA[modality];
+  const data = await prisma.modalityPage.findUnique({
+    where: { slug: modality },
+  });
   if (!data) return { title: "Pagina no encontrada" };
 
   return {
@@ -164,21 +36,26 @@ export default async function ModalityPage({
 }) {
   const { country, modality } = await params;
   if (!isCountrySlug(country)) notFound();
-  const data = MODALITY_DATA[modality];
 
+  const data = await prisma.modalityPage.findUnique({
+    where: { slug: modality },
+  });
   if (!data) notFound();
 
   const countryEnum = countryFromSlug(country);
   const base = `/${country}`;
+  const paragraphs = data.description.split("\n\n").filter(Boolean);
+  const highlights =
+    (data.highlights as unknown as ModalityHighlight[]) || [];
 
-  const [disciplines, experiences] = await Promise.all([
+  const [disciplines, experiences, settings] = await Promise.all([
     prisma.discipline.findMany({
       where: {
-        modalities: { has: data.prismaModality },
+        modalities: { has: data.modality },
         experiences: {
           some: {
             published: true,
-            modality: data.prismaModality,
+            modality: data.modality,
             country: countryEnum,
           },
         },
@@ -188,13 +65,14 @@ export default async function ModalityPage({
     prisma.experience.findMany({
       where: {
         published: true,
-        modality: data.prismaModality,
+        modality: data.modality,
         country: countryEnum,
       },
       include: { discipline: true },
       take: 6,
       orderBy: { createdAt: "desc" },
     }),
+    getSettings(),
   ]);
 
   return (
@@ -229,7 +107,7 @@ export default async function ModalityPage({
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
             {/* Text Content */}
             <div className="lg:col-span-3 space-y-4">
-              {data.description.map((paragraph, i) => (
+              {paragraphs.map((paragraph, i) => (
                 <p key={i} className="text-gray-600 leading-relaxed text-lg">
                   {paragraph}
                 </p>
@@ -237,26 +115,28 @@ export default async function ModalityPage({
             </div>
 
             {/* Highlights Card */}
-            <div className="lg:col-span-2">
-              <div className="bg-navy-700 rounded-2xl p-8 text-white sticky top-28">
-                <h3 className="font-heading text-xl font-bold mb-6">
-                  ¿Por que {data.title.toLowerCase()} con nosotros?
-                </h3>
-                <ul className="space-y-4">
-                  {data.highlights.map((item, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <span className="text-gold-400 text-lg mt-0.5">✓</span>
-                      <div>
-                        <p className="font-medium">{item.title}</p>
-                        <p className="text-navy-200 text-sm mt-1">
-                          {item.text}
-                        </p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
+            {highlights.length > 0 && (
+              <div className="lg:col-span-2">
+                <div className="bg-navy-700 rounded-2xl p-8 text-white sticky top-28">
+                  <h3 className="font-heading text-xl font-bold mb-6">
+                    ¿Por que {data.title.toLowerCase()} con nosotros?
+                  </h3>
+                  <ul className="space-y-4">
+                    {highlights.map((item, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <span className="text-gold-400 text-lg mt-0.5">✓</span>
+                        <div>
+                          <p className="font-medium">{item.title}</p>
+                          <p className="text-navy-200 text-sm mt-1">
+                            {item.text}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
@@ -276,7 +156,7 @@ export default async function ModalityPage({
               {disciplines.map((discipline) => (
                 <Link
                   key={discipline.id}
-                  href={`${base}/experiencias?modality=${data.prismaModality}&discipline=${discipline.slug}`}
+                  href={`${base}/experiencias?modality=${data.modality}&discipline=${discipline.slug}`}
                   className="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-lg hover:border-gold-400/50 transition-all duration-300"
                 >
                   <div className="relative h-40 bg-navy-100">
@@ -326,7 +206,7 @@ export default async function ModalityPage({
             {/* CTA to filtered experiences */}
             <div className="text-center mt-12">
               <Link
-                href={`${base}/experiencias?modality=${data.prismaModality}`}
+                href={`${base}/experiencias?modality=${data.modality}`}
                 className="inline-block bg-gold-400 hover:bg-gold-500 text-navy-900 font-semibold px-8 py-4 rounded-xl transition-colors"
               >
                 {data.ctaLabel}
@@ -341,7 +221,7 @@ export default async function ModalityPage({
         <section className="py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
             <Link
-              href={`${base}/experiencias?modality=${data.prismaModality}`}
+              href={`${base}/experiencias?modality=${data.modality}`}
               className="inline-block bg-gold-400 hover:bg-gold-500 text-navy-900 font-semibold px-8 py-4 rounded-xl transition-colors"
             >
               {data.ctaLabel}
@@ -360,7 +240,7 @@ export default async function ModalityPage({
             Consultanos por WhatsApp y armamos tu experiencia deportiva a medida
           </p>
           <a
-            href={getWhatsAppUrl(WHATSAPP_NUMBER, data.whatsappMessage)}
+            href={getWhatsAppUrl(settings.whatsapp_number, data.whatsappMessage)}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white font-semibold text-lg px-10 py-4 rounded-xl transition-colors"

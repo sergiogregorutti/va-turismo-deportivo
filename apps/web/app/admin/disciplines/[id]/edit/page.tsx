@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 
 const MODALITY_OPTIONS = [
   { value: "PRACTICAR", label: "Practicar" },
@@ -162,13 +163,12 @@ export default function EditDisciplinePage() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              URL de Imagen
+              Imagen
             </label>
-            <input
-              type="url"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
+            <ImageUploader
+              value={imageUrl ? [imageUrl] : []}
+              onChange={(urls) => setImageUrl(urls[0] || "")}
+              folder="disciplinas"
             />
           </div>
 

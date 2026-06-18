@@ -1,7 +1,10 @@
+export const dynamic = "force-dynamic";
+
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { TriadaCards, type TriadaItem } from "@/components/shared/TriadaCards";
+import { getSettings } from "@/lib/settings";
 
 export const metadata: Metadata = {
   title: "VA | VA Turismo Deportivo",
@@ -49,6 +52,7 @@ export default async function VAPage({
   params: Promise<{ country: string }>;
 }) {
   const { country } = await params;
+  const settings = await getSettings();
   return (
     <div className="bg-gray-50 min-h-screen">
       {/* Hero */}
@@ -71,16 +75,7 @@ export default async function VAPage({
               VA Turismo Deportivo
             </h2>
             <p className="text-gray-600 leading-relaxed text-lg">
-              Somos una plataforma de experiencias deportivas y de viaje que
-              conecta personas, familias, equipos y empresas con las mejores
-              propuestas para vivir el deporte en Argentina, Venezuela y
-              Latinoamerica. Disenamos y articulamos viajes a medida para
-              practicar, participar o presenciar el deporte desde una mirada
-              segura, premium y local: entrenamientos, competencias, eventos,
-              hospitality, alojamiento, transporte y concierge. Nuestro
-              proposito es transformar cada destino en una experiencia
-              deportiva integral, combinando deporte, cultura, naturaleza y
-              estilo de vida.
+              {settings.va_intro}
             </p>
           </div>
         </div>
@@ -167,23 +162,7 @@ export default async function VAPage({
                   Nosotros
                 </h3>
                 <p className="text-gray-600 leading-relaxed">
-                  VA Turismo Deportivo nace de la vision de su fundador,{" "}
-                  <strong className="text-navy-700">
-                    Luis Miguel Colmenares
-                  </strong>
-                  , emprendedor, empresario y especialista en negocios
-                  deportivos en Latinoamerica, con mas de 15 anos de
-                  experiencia desarrollando proyectos, eventos y plataformas
-                  vinculadas al deporte, la gestion y el entretenimiento. A lo
-                  largo de su trayectoria ha impulsado iniciativas en
-                  Argentina, Venezuela, Colombia, entre otros, combinando una
-                  mirada estrategica del deporte como industria con una
-                  profunda pasion por conectar personas, destinos y
-                  experiencias. Desde esa vision, VA fue creada como una
-                  plataforma curadora de turismo deportivo, pensada para
-                  acercar a viajeros, familias, equipos, empresas y fanaticos
-                  a las mejores experiencias deportivas de la region, con
-                  seguridad, criterio local y una ejecucion profesional.
+                  {settings.va_nosotros}
                 </p>
               </div>
 

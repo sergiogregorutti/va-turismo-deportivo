@@ -10,7 +10,12 @@ const navItems = [
   { href: "/admin/disciplines", label: "Disciplinas", icon: "🏅" },
   { href: "/admin/experiences", label: "Experiencias", icon: "🌍" },
   { href: "/admin/hospedajes", label: "Hospedajes", icon: "🏨" },
+  { href: "/admin/ciudades", label: "Ciudades", icon: "🏙️" },
+  { href: "/admin/hero", label: "Portada", icon: "🖼️" },
+  { href: "/admin/aliados", label: "Aliados", icon: "🤝" },
+  { href: "/admin/paginas", label: "Paginas", icon: "📄" },
   { href: "/admin/contacts", label: "Contactos", icon: "📩" },
+  { href: "/admin/ajustes", label: "Ajustes", icon: "⚙️" },
 ];
 
 export default function AdminLayout({

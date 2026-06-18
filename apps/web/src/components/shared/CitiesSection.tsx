@@ -1,10 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getCitiesByCountry } from "@/data/cities";
-import { countryLabel, type CountrySlug } from "@/lib/country";
+import { prisma } from "@/lib/prisma";
+import { countryFromSlug, countryLabel, type CountrySlug } from "@/lib/country";
 
-export function CitiesSection({ country }: { country: CountrySlug }) {
-  const countryCities = getCitiesByCountry(country);
+export async function CitiesSection({ country }: { country: CountrySlug }) {
+  const countryCities = await prisma.cityPage.findMany({
+    where: { country: countryFromSlug(country), published: true },
+    orderBy: { order: "asc" },
+  });
 
   if (countryCities.length === 0) return null;
 
@@ -51,7 +54,7 @@ export function CitiesSection({ country }: { country: CountrySlug }) {
             >
               <div className="relative aspect-[3/4] rounded-xl overflow-hidden shadow-sm">
                 <Image
-                  src={city.image}
+                  src={city.imageUrl}
                   alt={city.name}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"

@@ -1,9 +1,11 @@
+export const dynamic = "force-dynamic";
+
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getCitiesByCountry } from "@/data/cities";
-import { countryLabel, isCountrySlug } from "@/lib/country";
+import { prisma } from "@/lib/prisma";
+import { countryFromSlug, countryLabel, isCountrySlug } from "@/lib/country";
 
 export async function generateMetadata({
   params,
@@ -12,12 +14,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { country } = await params;
   if (!isCountrySlug(country)) return { title: "Ciudades" };
-  const names = getCitiesByCountry(country)
-    .map((c) => c.name)
-    .join(", ");
   return {
     title: "Ciudades | VA Turismo Deportivo",
-    description: `Descubrí los destinos más icónicos del turismo deportivo en ${countryLabel(country)}: ${names}.`,
+    description: `Descubrí los destinos más icónicos del turismo deportivo en ${countryLabel(country)}.`,
   };
 }
 
@@ -28,7 +27,11 @@ export default async function CitiesPage({
 }) {
   const { country } = await params;
   if (!isCountrySlug(country)) notFound();
-  const countryCities = getCitiesByCountry(country);
+
+  const countryCities = await prisma.cityPage.findMany({
+    where: { country: countryFromSlug(country), published: true },
+    orderBy: { order: "asc" },
+  });
 
   return (
     <div className="bg-white">
@@ -55,7 +58,7 @@ export default async function CitiesPage({
               >
                 <div className="relative aspect-[16/10] rounded-2xl overflow-hidden shadow-sm">
                   <Image
-                    src={city.image}
+                    src={city.imageUrl}
                     alt={city.name}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -67,7 +70,7 @@ export default async function CitiesPage({
                       {city.name}
                     </h2>
                     <p className="text-gold-400 text-sm font-medium mt-1">
-                      {city.province}, {city.country}
+                      {city.province}, {countryLabel(country)}
                     </p>
                     <p className="text-white/90 text-sm mt-3 line-clamp-2">
                       {city.tagline}

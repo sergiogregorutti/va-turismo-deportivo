@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 
 const MODALITY_OPTIONS = [
   { value: "PRACTICAR", label: "Practicar" },
@@ -28,6 +29,7 @@ export default function NewDisciplinePage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -50,7 +52,7 @@ export default function NewDisciplinePage() {
     const body = {
       name: formData.get("name"),
       description: formData.get("description"),
-      imageUrl: formData.get("imageUrl") || null,
+      imageUrl: imageUrl || null,
       modalities,
       countries,
       cities,
@@ -127,13 +129,12 @@ export default function NewDisciplinePage() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              URL de Imagen
+              Imagen
             </label>
-            <input
-              name="imageUrl"
-              type="url"
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
-              placeholder="https://images.unsplash.com/..."
+            <ImageUploader
+              value={imageUrl ? [imageUrl] : []}
+              onChange={(urls) => setImageUrl(urls[0] || "")}
+              folder="disciplinas"
             />
           </div>
 

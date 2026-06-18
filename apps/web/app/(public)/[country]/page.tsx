@@ -4,8 +4,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { HeroSlider } from "@/components/shared/HeroSlider";
-import { WHATSAPP_NUMBER } from "@/lib/constants";
 import { getWhatsAppUrl } from "@/lib/utils";
+import { getSettings } from "@/lib/settings";
 import { FeaturedExperiencesGrid } from "@/components/shared/FeaturedExperiencesGrid";
 import { SearchBar } from "@/components/shared/SearchBar";
 import { CalendarSection } from "@/components/shared/CalendarSection";
@@ -49,28 +49,41 @@ export default async function HomePage({
   const countryEnum = countryFromSlug(country);
   const base = `/${country}`;
 
-  const featuredExperiences = await prisma.experience.findMany({
-    where: { published: true, featured: true, country: countryEnum },
-    include: { discipline: true },
-    take: 6,
-    orderBy: { createdAt: "desc" },
-  });
-
-  const upcomingExperiences = await prisma.experience.findMany({
-    where: {
-      published: true,
-      country: countryEnum,
-      startDate: { gte: new Date() },
-    },
-    include: { discipline: true },
-    orderBy: { startDate: "asc" },
-    take: 12,
-  });
+  const [featuredExperiences, upcomingExperiences, heroSlides, settings] =
+    await Promise.all([
+      prisma.experience.findMany({
+        where: { published: true, featured: true, country: countryEnum },
+        include: { discipline: true },
+        take: 6,
+        orderBy: { createdAt: "desc" },
+      }),
+      prisma.experience.findMany({
+        where: {
+          published: true,
+          country: countryEnum,
+          startDate: { gte: new Date() },
+        },
+        include: { discipline: true },
+        orderBy: { startDate: "asc" },
+        take: 12,
+      }),
+      prisma.heroSlide.findMany({
+        where: { country: countryEnum, published: true },
+        orderBy: { order: "asc" },
+      }),
+      getSettings(),
+    ]);
 
   return (
     <>
       {/* Hero Section */}
-      <HeroSlider countryName={countryLabel(country)} />
+      <HeroSlider
+        countryName={countryLabel(country)}
+        slides={heroSlides.map((s) => ({
+          src: s.imageUrl,
+          alt: s.alt || `Turismo deportivo en ${countryLabel(country)}`,
+        }))}
+      />
 
       {/* Search Bar */}
       <SearchBar country={country} />
@@ -135,7 +148,7 @@ export default async function HomePage({
           </p>
           <a
             href={getWhatsAppUrl(
-              WHATSAPP_NUMBER,
+              settings.whatsapp_number,
               "Hola! Quiero mas informacion sobre experiencias de turismo deportivo"
             )}
             target="_blank"

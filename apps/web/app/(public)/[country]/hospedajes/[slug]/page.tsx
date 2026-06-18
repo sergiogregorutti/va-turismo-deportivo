@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getWhatsAppUrl } from "@/lib/utils";
-import { WHATSAPP_NUMBER } from "@/lib/constants";
+import { getSettings } from "@/lib/settings";
 import { HospedajeCard } from "@/components/shared/HospedajeCard";
 import { isCountrySlug, slugFromCountry } from "@/lib/country";
 import type { Metadata } from "next";
@@ -65,6 +65,7 @@ export default async function HospedajeDetailPage({
     take: 3,
   });
 
+  const settings = await getSettings();
   const whatsappMessage = `Hola! Me interesa el hospedaje: ${hospedaje.title} en ${hospedaje.location}`;
 
   return (
@@ -178,7 +179,7 @@ export default async function HospedajeDetailPage({
               )}
 
               <a
-                href={getWhatsAppUrl(WHATSAPP_NUMBER, whatsappMessage)}
+                href={getWhatsAppUrl(settings.whatsapp_number, whatsappMessage)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-3 w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-4 rounded-xl transition-colors"

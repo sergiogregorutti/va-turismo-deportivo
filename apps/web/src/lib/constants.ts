@@ -72,8 +72,8 @@ export const MONTHS = [
   { value: "12", label: "Diciembre" },
 ];
 
-export const WHATSAPP_NUMBER = "5411153774567";
+// El numero de WhatsApp y el email de contacto ahora viven en SiteSetting
+// (editable desde el admin); ver src/lib/settings.ts
 export const WHATSAPP_BASE_URL = "https://wa.me/";
 
-export const CONTACT_EMAIL = "contacto@vaturismodeportivo.com";
 export const SITE_NAME = "VA Turismo Deportivo";

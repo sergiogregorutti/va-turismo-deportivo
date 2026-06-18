@@ -1,10 +1,21 @@
 import Link from "next/link";
 import Image from "next/image";
-import { WHATSAPP_NUMBER, CONTACT_EMAIL } from "@/lib/constants";
 import { getWhatsAppUrl } from "@/lib/utils";
 import type { CountrySlug } from "@/lib/country";
 
-export function Footer({ country }: { country: CountrySlug }) {
+interface FooterProps {
+  country: CountrySlug;
+  whatsappNumber: string;
+  whatsappDisplay: string;
+  contactEmail: string;
+}
+
+export function Footer({
+  country,
+  whatsappNumber,
+  whatsappDisplay,
+  contactEmail,
+}: FooterProps) {
   const base = `/${country}`;
   return (
     <footer className="bg-navy-800 text-white">
@@ -82,24 +93,24 @@ export function Footer({ country }: { country: CountrySlug }) {
             <ul className="space-y-3">
               <li>
                 <a
-                  href={`mailto:${CONTACT_EMAIL}`}
+                  href={`mailto:${contactEmail}`}
                   className="text-navy-300 hover:text-white transition-colors text-sm"
                 >
-                  {CONTACT_EMAIL}
+                  {contactEmail}
                 </a>
               </li>
               <li>
                 <a
-                  href={`tel:+${WHATSAPP_NUMBER}`}
+                  href={`tel:+${whatsappNumber}`}
                   className="text-navy-300 hover:text-white transition-colors text-sm"
                 >
-                  +54 11 5377-4567
+                  {whatsappDisplay}
                 </a>
               </li>
               <li>
                 <a
                   href={getWhatsAppUrl(
-                    WHATSAPP_NUMBER,
+                    whatsappNumber,
                     "Hola! Quiero mas informacion sobre VA Turismo Deportivo"
                   )}
                   target="_blank"

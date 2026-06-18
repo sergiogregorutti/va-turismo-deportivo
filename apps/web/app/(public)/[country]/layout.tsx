@@ -1,11 +1,8 @@
 import { notFound } from "next/navigation";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { COUNTRY_SLUGS, isCountrySlug } from "@/lib/country";
-
-export function generateStaticParams() {
-  return COUNTRY_SLUGS.map((country) => ({ country }));
-}
+import { isCountrySlug } from "@/lib/country";
+import { getSettings } from "@/lib/settings";
 
 export default async function PublicLayout({
   children,
@@ -17,11 +14,18 @@ export default async function PublicLayout({
   const { country } = await params;
   if (!isCountrySlug(country)) notFound();
 
+  const settings = await getSettings();
+
   return (
     <>
       <Header country={country} />
       <main className="min-h-screen">{children}</main>
-      <Footer country={country} />
+      <Footer
+        country={country}
+        whatsappNumber={settings.whatsapp_number}
+        whatsappDisplay={settings.whatsapp_display}
+        contactEmail={settings.contact_email}
+      />
     </>
   );
 }

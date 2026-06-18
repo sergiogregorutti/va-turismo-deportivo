@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 
 const COUNTRY_OPTIONS = [
   { value: "ARGENTINA", label: "Argentina" },
@@ -47,7 +48,7 @@ export default function NewExperiencePage() {
   const [disciplines, setDisciplines] = useState<Discipline[]>([]);
   const [country, setCountry] = useState("");
   const [modality, setModality] = useState("");
-  const [imageUrls, setImageUrls] = useState<string[]>([""]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   useEffect(() => {
     fetch("/api/disciplines")
@@ -58,20 +59,6 @@ export default function NewExperiencePage() {
   const filteredDisciplines = modality
     ? disciplines.filter((d) => d.modalities.includes(modality))
     : disciplines;
-
-  function addImageUrl() {
-    setImageUrls([...imageUrls, ""]);
-  }
-
-  function updateImageUrl(index: number, value: string) {
-    const updated = [...imageUrls];
-    updated[index] = value;
-    setImageUrls(updated);
-  }
-
-  function removeImageUrl(index: number) {
-    setImageUrls(imageUrls.filter((_, i) => i !== index));
-  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -278,37 +265,14 @@ export default function NewExperiencePage() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Imagenes (URLs)
+              Imagenes
             </label>
-            <div className="space-y-3">
-              {imageUrls.map((url, index) => (
-                <div key={index} className="flex gap-2">
-                  <input
-                    type="url"
-                    value={url}
-                    onChange={(e) => updateImageUrl(index, e.target.value)}
-                    className="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
-                    placeholder="https://images.unsplash.com/..."
-                  />
-                  {imageUrls.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeImageUrl(index)}
-                      className="px-3 py-3 text-red-400 hover:text-red-600 transition-colors"
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
-              ))}
-              <button
-                type="button"
-                onClick={addImageUrl}
-                className="text-sm text-gold-500 hover:text-gold-600 font-medium"
-              >
-                + Agregar otra imagen
-              </button>
-            </div>
+            <ImageUploader
+              value={imageUrls}
+              onChange={setImageUrls}
+              multiple
+              folder="experiencias"
+            />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

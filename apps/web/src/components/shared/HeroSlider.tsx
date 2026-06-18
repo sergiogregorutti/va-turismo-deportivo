@@ -3,23 +3,32 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 
-const slides = [
-  { src: "/images/home_hero/1.jpg", alt: "Turismo deportivo 1" },
-  { src: "/images/home_hero/2.jpg", alt: "Turismo deportivo 2" },
-  { src: "/images/home_hero/3.jpg", alt: "Turismo deportivo 3" },
-  { src: "/images/home_hero/4.jpg", alt: "Turismo deportivo 4" },
-  { src: "/images/home_hero/5.jpg", alt: "Turismo deportivo 5" },
-  { src: "/images/home_hero/6.jpg", alt: "Turismo deportivo 6" },
-];
+export interface HeroSlideItem {
+  src: string;
+  alt: string;
+}
+
+// Fallback si todavia no hay slides cargados en el admin
+const DEFAULT_SLIDES: HeroSlideItem[] = [1, 2, 3, 4, 5, 6].map((n) => ({
+  src: `/images/home_hero/${n}.jpg`,
+  alt: `Turismo deportivo ${n}`,
+}));
 
 const INTERVAL = 5000;
 
-export function HeroSlider({ countryName }: { countryName: string }) {
+export function HeroSlider({
+  countryName,
+  slides,
+}: {
+  countryName: string;
+  slides?: HeroSlideItem[];
+}) {
+  const items = slides && slides.length > 0 ? slides : DEFAULT_SLIDES;
   const [current, setCurrent] = useState(0);
 
   const next = useCallback(() => {
-    setCurrent((prev) => (prev + 1) % slides.length);
-  }, []);
+    setCurrent((prev) => (prev + 1) % items.length);
+  }, [items.length]);
 
   useEffect(() => {
     const timer = setInterval(next, INTERVAL);
@@ -29,7 +38,7 @@ export function HeroSlider({ countryName }: { countryName: string }) {
   return (
     <section className="relative h-[70vh] md:h-[85vh] overflow-hidden">
       {/* Slides */}
-      {slides.map((slide, i) => (
+      {items.map((slide, i) => (
         <div
           key={i}
           className={`absolute inset-0 transition-opacity duration-1000 ${
@@ -65,7 +74,7 @@ export function HeroSlider({ countryName }: { countryName: string }) {
 
       {/* Dots */}
       <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-3">
-        {slides.map((_, i) => (
+        {items.map((_, i) => (
           <button
             key={i}
             onClick={() => setCurrent(i)}

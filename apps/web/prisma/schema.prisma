@@ -115,6 +115,74 @@ model Hospedaje {
   @@index([featured])
 }
 
+model CityPage {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  province    String
+  country     Country
+  imageUrl    String
+  tagline     String
+  intro       String   @db.Text
+  about       String   @db.Text
+  climate     String   @db.Text
+  bestSeasons String[]
+  sports      String[]
+  highlights  Json     @default("[]")
+  gettingThere String  @db.Text
+  order       Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([country, published])
+}
+
+model HeroSlide {
+  id        String   @id @default(cuid())
+  country   Country
+  imageUrl  String
+  alt       String?
+  order     Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([country, published])
+}
+
+model Aliado {
+  id        String   @id @default(cuid())
+  name      String
+  tag       String?
+  logoUrl   String?
+  order     Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ModalityPage {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  modality        Modality
+  title           String
+  tagline         String
+  heroDescription String   @db.Text
+  description     String   @db.Text
+  highlights      Json     @default("[]")
+  ctaLabel        String
+  whatsappMessage String   @db.Text
+  metaDescription String   @db.Text
+  updatedAt       DateTime @updatedAt
+}
+
+model SiteSetting {
+  key       String   @id
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
+}
+
 model ContactLead {
   id          String   @id @default(cuid())
   name        String

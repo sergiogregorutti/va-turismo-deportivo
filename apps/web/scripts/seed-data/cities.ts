@@ -1,4 +1,4 @@
-import type { CountrySlug } from "@/lib/country";
+type CountrySlug = "argentina" | "venezuela";
 
 export interface CityHighlight {
   title: string;
