@@ -7,6 +7,7 @@ export async function CitiesSection({ country }: { country: CountrySlug }) {
   const countryCities = await prisma.cityPage.findMany({
     where: { country: countryFromSlug(country), published: true },
     orderBy: { order: "asc" },
+    take: 4,
   });
 
   if (countryCities.length === 0) return null;

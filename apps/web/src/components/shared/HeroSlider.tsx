@@ -24,6 +24,9 @@ export function HeroSlider({
   slides?: HeroSlideItem[];
 }) {
   const items = slides && slides.length > 0 ? slides : DEFAULT_SLIDES;
+  // Resaltamos la pasión de Argentina y la energía de Venezuela
+  const tagline =
+    countryName === "Venezuela" ? "Vive la energía" : "Viví la pasión";
   const [current, setCurrent] = useState(0);
 
   const next = useCallback(() => {
@@ -63,7 +66,7 @@ export function HeroSlider({
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
           <h1 className="font-heading text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight leading-none text-white">
-            Viví la pasión
+            {tagline}
             <br />
             <span className="text-gold-400">de {countryName}</span>
             <br />

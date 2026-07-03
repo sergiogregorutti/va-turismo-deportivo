@@ -12,21 +12,24 @@ export const metadata: Metadata = {
     "VA Turismo Deportivo: una plataforma curadora de experiencias deportivas y de viaje en Argentina, Venezuela y Latinoamerica. Conoce el modelo 3P y nuestros formatos de viaje.",
 };
 
-const triada3P: TriadaItem[] = [
+const triada3P = (base: string): TriadaItem[] => [
   {
     title: "Practicar",
     description: "Aprender, entrenar, perfeccionarse",
+    href: `${base}/practicar`,
     gradient: "from-blue-900/80 to-blue-700/60",
   },
   {
     title: "Participar",
     description:
       "Correr, jugar, desafiarse, sumarse a una prueba o travesia",
+    href: `${base}/participar`,
     gradient: "from-amber-900/80 to-amber-700/60",
   },
   {
     title: "Presenciar",
     description: "Asistir, vivir el evento, hospitality, VIP, fandom",
+    href: `${base}/presenciar`,
     gradient: "from-green-900/80 to-green-700/60",
   },
 ];
@@ -52,16 +55,22 @@ export default async function VAPage({
   params: Promise<{ country: string }>;
 }) {
   const { country } = await params;
+  const base = `/${country}`;
   const settings = await getSettings();
   return (
     <div className="bg-gray-50 min-h-screen">
       {/* Hero */}
-      <section className="bg-navy-700 text-white py-16">
+      <section className="bg-white py-16 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
-          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4">
-            VA
-          </h1>
-          <p className="text-navy-200 max-w-2xl mx-auto">
+          <Image
+            src="/images/va_isotipo.svg"
+            alt="VA Turismo Deportivo"
+            width={120}
+            height={85}
+            className="mx-auto mb-6 h-20 w-auto"
+            priority
+          />
+          <p className="text-navy-700 font-medium max-w-2xl mx-auto">
             Turismo deportivo de autor
           </p>
         </div>
@@ -95,7 +104,7 @@ export default async function VAPage({
             </strong>
           </p>
 
-          <TriadaCards items={triada3P} />
+          <TriadaCards items={triada3P(base)} />
         </div>
       </section>
 
@@ -138,7 +147,7 @@ export default async function VAPage({
             <div className="lg:col-span-2">
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                 <Image
-                  src="/images/luismiguelcolmenares.png"
+                  src="/images/LMCM.png"
                   alt="Luis Miguel Colmenares"
                   width={500}
                   height={500}
