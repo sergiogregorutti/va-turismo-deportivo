@@ -6,8 +6,14 @@
  *
  * Uso: pnpm exec tsx --env-file=.env scripts/seed-content.ts
  */
-import { PrismaClient, Country, Modality, Prisma } from "@prisma/client";
+import {
+  PrismaClient,
+  Country,
+  Modality,
+  Prisma,
+} from "@prisma/client";
 import { cities } from "./seed-data/cities";
+import { services as SERVICES } from "./seed-data/services";
 
 const prisma = new PrismaClient();
 
@@ -133,6 +139,26 @@ const SETTINGS: Record<string, string> = {
   contact_email: "contacto@vaturismodeportivo.com",
   va_intro:
     "Somos una plataforma de experiencias deportivas y de viaje que conecta personas, familias, equipos y empresas con las mejores propuestas para vivir el deporte en Argentina, Venezuela y Latinoamerica. Disenamos y articulamos viajes a medida para practicar, participar o presenciar el deporte desde una mirada segura, premium y local: entrenamientos, competencias, eventos, hospitality, alojamiento, transporte y concierge. Nuestro proposito es transformar cada destino en una experiencia deportiva integral, combinando deporte, cultura, naturaleza y estilo de vida.",
+  enabled_countries: "argentina",
+  social_instagram: "",
+  social_linkedin: "",
+  social_website: "",
+  servicios_hero_title: "Servicios",
+  servicios_hero_subtitle:
+    "Hospedajes, transporte y concierge para vivir cada destino al maximo",
+  servicios_hospedajes_title: "Hospedajes",
+  servicios_hospedajes_description:
+    "Alojamientos tematicos y propiedades unicas seleccionadas para viajeros, familias y equipos deportivos.",
+  servicios_transporte_title: "Transporte",
+  servicios_transporte_description:
+    "Solucionamos cada tramo del viaje por aire, tierra y mar: Aereo (avion comercial, privado, helicoptero), Terrestre (autobuses, vans, autos, alquiler) y Maritimo (veleros).",
+  servicios_concierge_title: "Concierge",
+  servicios_concierge_description:
+    "Gestionamos accesos, reservas y experiencias en destino para que cada viaje fluya sin friccion.",
+  servicios_cta_title: "Armemos tu proximo viaje",
+  servicios_cta_description:
+    "Contanos a donde queres ir y que querer vivir. Disenamos una propuesta a medida con todos los servicios incluidos.",
+  servicios_cta_button: "Consulta tu viaje",
   va_nosotros:
     "VA Turismo Deportivo nace de la vision de su fundador, Luis Miguel Colmenares, emprendedor, empresario y especialista en negocios deportivos en Latinoamerica, con mas de 15 anos de experiencia desarrollando proyectos, eventos y plataformas vinculadas al deporte, la gestion y el entretenimiento. A lo largo de su trayectoria ha impulsado iniciativas en Argentina, Venezuela, Colombia, entre otros, combinando una mirada estrategica del deporte como industria con una profunda pasion por conectar personas, destinos y experiencias. Desde esa vision, VA fue creada como una plataforma curadora de turismo deportivo, pensada para acercar a viajeros, familias, equipos, empresas y fanaticos a las mejores experiencias deportivas de la region, con seguridad, criterio local y una ejecucion profesional.",
 };
@@ -208,6 +234,17 @@ async function main() {
     console.log(`✔ ${HERO_IMAGES.length * 2} hero slides`);
   } else {
     console.log(`- hero slides ya existentes (${slideCount}), no se tocan`);
+  }
+
+  // Servicios (solo si esta vacio)
+  const serviceCount = await prisma.serviceItem.count();
+  if (serviceCount === 0) {
+    await prisma.serviceItem.createMany({
+      data: SERVICES.map((s, index) => ({ ...s, order: index })),
+    });
+    console.log(`✔ ${SERVICES.length} servicios`);
+  } else {
+    console.log(`- servicios ya existentes (${serviceCount}), no se tocan`);
   }
 
   // Aliados (solo si esta vacio)

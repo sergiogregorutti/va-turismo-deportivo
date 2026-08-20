@@ -9,6 +9,7 @@ import {
   type ServiceCarouselItem,
 } from "@/components/shared/ServiceCarousel";
 import { countryFromSlug, countryLabel, isCountrySlug } from "@/lib/country";
+import { getSettings } from "@/lib/settings";
 
 export async function generateMetadata({
   params,
@@ -22,88 +23,6 @@ export async function generateMetadata({
     description: `Hospedajes, transporte y concierge: gestionamos cada detalle de tu experiencia deportiva en ${label} y Latinoamerica.`,
   };
 }
-
-const TRANSPORTE: ServiceCarouselItem[] = [
-  {
-    title: "Avion Comercial",
-    description:
-      "Vuelos comerciales con tarifas optimizadas y conexiones a los principales destinos deportivos de la region.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200",
-    badge: "Aereo",
-  },
-  {
-    title: "Avion Privado",
-    description:
-      "Charters privados a medida para equipos, delegaciones y grupos que requieren maxima flexibilidad y privacidad.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=1200",
-    badge: "Aereo",
-  },
-  {
-    title: "Helicoptero",
-    description:
-      "Traslados rapidos a destinos remotos, sobrevuelos panoramicos y conexion eficiente entre ciudades y estancias.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1608236415053-3691791bbffe?w=1200",
-    badge: "Aereo",
-  },
-  {
-    title: "Autobuses y Vans",
-    description:
-      "Flota de autobuses y vans para grupos deportivos, con conductores profesionales y rutas adaptadas a cada agenda.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1494515843206-f3117d3f51b7?w=1200",
-    badge: "Terrestre",
-  },
-  {
-    title: "Autos y Alquiler",
-    description:
-      "Autos con conductor o alquiler con o sin chofer, desde city cars hasta SUVs premium para cada ocasion.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1502877338535-766e1452684a?w=1200",
-    badge: "Terrestre",
-  },
-  {
-    title: "Veleros",
-    description:
-      "Charters maritimos para travesias, regatas y experiencias unicas en costas argentinas y caribenas.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1504805572947-34fad45aed93?w=1200",
-    badge: "Maritimo",
-  },
-];
-
-const CONCIERGE: ServiceCarouselItem[] = [
-  {
-    title: "Gestion de accesos y reservas",
-    description:
-      "Coordinacion de tickets, hospitality, eventos deportivos, restaurantes, clubes y experiencias exclusivas en destino.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=1200",
-  },
-  {
-    title: "Curaduria de experiencias locales",
-    description:
-      "Seleccion de planes deportivos, gastronomicos, culturales y sociales alineados al perfil del viajero o del grupo.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200",
-  },
-  {
-    title: "Acompanamiento personalizado",
-    description:
-      "Asistencia antes y durante el viaje para resolver necesidades operativas, cambios, recomendaciones y coordinacion de agenda.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200",
-  },
-  {
-    title: "Conexion con actores clave del destino",
-    description:
-      "Acceso a proveedores, clubes, entrenadores, instituciones, espacios deportivos y contactos locales de confianza.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200",
-  },
-];
 
 function truncate(text: string, max = 140) {
   if (text.length <= max) return text;
@@ -119,12 +38,20 @@ export default async function ServiciosPage({
   if (!isCountrySlug(country)) notFound();
   const base = `/${country}`;
 
-  const hospedajes = await prisma.hospedaje.findMany({
-    where: { published: true, country: countryFromSlug(country) },
-    orderBy: { createdAt: "desc" },
-  });
+  const [hospedajes, services, settings] = await Promise.all([
+    prisma.hospedaje.findMany({
+      where: { published: true, country: countryFromSlug(country) },
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.serviceItem.findMany({
+      where: { published: true },
+      orderBy: { order: "asc" },
+    }),
+    getSettings(),
+  ]);
 
   const hospedajeItems: ServiceCarouselItem[] = hospedajes.map((h) => ({
+    id: h.id,
     title: h.title,
     description: truncate(h.description),
     imageUrl: h.imageUrls[0] ?? "",
@@ -132,17 +59,31 @@ export default async function ServiciosPage({
     badge: h.city ? h.city.replace(/_/g, " ") : undefined,
   }));
 
+  const toCarouselItem = (s: (typeof services)[number]): ServiceCarouselItem => ({
+    id: s.id,
+    title: s.title,
+    description: s.description,
+    imageUrl: s.imageUrl,
+    badge: s.badge ?? undefined,
+  });
+
+  const transporteItems = services
+    .filter((s) => s.category === "TRANSPORTE")
+    .map(toCarouselItem);
+  const conciergeItems = services
+    .filter((s) => s.category === "CONCIERGE")
+    .map(toCarouselItem);
+
   return (
     <div className="bg-gray-50 min-h-screen">
       {/* Hero */}
       <section className="bg-navy-700 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
           <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4">
-            Servicios
+            {settings.servicios_hero_title}
           </h1>
           <p className="text-navy-200 max-w-2xl mx-auto">
-            Hospedajes, transporte y concierge para vivir cada destino al
-            maximo
+            {settings.servicios_hero_subtitle}
           </p>
         </div>
       </section>
@@ -153,11 +94,10 @@ export default async function ServiciosPage({
           <div className="flex items-end justify-between mb-8">
             <div>
               <h2 className="font-heading text-3xl md:text-4xl font-bold text-navy-700">
-                Hospedajes
+                {settings.servicios_hospedajes_title}
               </h2>
               <p className="text-gray-600 mt-2 max-w-2xl">
-                Alojamientos tematicos y propiedades unicas seleccionadas para
-                viajeros, familias y equipos deportivos.
+                {settings.servicios_hospedajes_description}
               </p>
             </div>
             {hospedajeItems.length > 0 && (
@@ -183,54 +123,53 @@ export default async function ServiciosPage({
       </section>
 
       {/* Transporte */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="mb-8">
-            <h2 className="font-heading text-3xl md:text-4xl font-bold text-navy-700">
-              Transporte
-            </h2>
-            <p className="text-gray-600 mt-2 max-w-2xl">
-              Solucionamos cada tramo del viaje por aire, tierra y mar:
-              <strong> Aereo</strong> (avion comercial, privado, helicoptero),{" "}
-              <strong>Terrestre</strong> (autobuses, vans, autos, alquiler) y{" "}
-              <strong>Maritimo</strong> (veleros).
-            </p>
+      {transporteItems.length > 0 && (
+        <section className="py-16 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="mb-8">
+              <h2 className="font-heading text-3xl md:text-4xl font-bold text-navy-700">
+                {settings.servicios_transporte_title}
+              </h2>
+              <p className="text-gray-600 mt-2 max-w-2xl">
+                {settings.servicios_transporte_description}
+              </p>
+            </div>
+            <ServiceCarousel items={transporteItems} />
           </div>
-          <ServiceCarousel items={TRANSPORTE} />
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Concierge */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="mb-8">
-            <h2 className="font-heading text-3xl md:text-4xl font-bold text-navy-700">
-              Concierge
-            </h2>
-            <p className="text-gray-600 mt-2 max-w-2xl">
-              Gestionamos accesos, reservas y experiencias en destino para que
-              cada viaje fluya sin friccion.
-            </p>
+      {conciergeItems.length > 0 && (
+        <section className="py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="mb-8">
+              <h2 className="font-heading text-3xl md:text-4xl font-bold text-navy-700">
+                {settings.servicios_concierge_title}
+              </h2>
+              <p className="text-gray-600 mt-2 max-w-2xl">
+                {settings.servicios_concierge_description}
+              </p>
+            </div>
+            <ServiceCarousel items={conciergeItems} />
           </div>
-          <ServiceCarousel items={CONCIERGE} />
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* CTA */}
       <section className="bg-navy-700 py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mb-4">
-            Armemos tu proximo viaje
+            {settings.servicios_cta_title}
           </h2>
           <p className="text-navy-200 mb-8 max-w-2xl mx-auto">
-            Contanos a donde queres ir y que querer vivir. Disenamos una
-            propuesta a medida con todos los servicios incluidos.
+            {settings.servicios_cta_description}
           </p>
           <Link
             href={`${base}/contacto`}
             className="inline-block bg-gold-400 hover:bg-gold-500 text-navy-900 font-semibold px-8 py-4 rounded-xl transition-colors"
           >
-            Consulta tu viaje
+            {settings.servicios_cta_button}
           </Link>
         </div>
       </section>

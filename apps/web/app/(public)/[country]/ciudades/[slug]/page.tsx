@@ -61,7 +61,7 @@ export default async function CityPage({
       {/* Hero */}
       <section className="relative h-[60vh] min-h-[480px] w-full">
         <Image
-          src={city.imageUrl}
+          src={city.heroImageUrl || city.imageUrl}
           alt={city.name}
           fill
           priority
@@ -243,7 +243,7 @@ export default async function CityPage({
                   href={`/${country}/ciudades/${c.slug}`}
                   className="group block"
                 >
-                  <div className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-sm">
+                  <div className="relative aspect-[3/4] rounded-xl overflow-hidden shadow-sm">
                     <Image
                       src={c.imageUrl}
                       alt={c.name}

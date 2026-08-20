@@ -19,6 +19,7 @@ export default function EditCityPage() {
           province: city.province || "",
           country: city.country,
           imageUrl: city.imageUrl || "",
+          heroImageUrl: city.heroImageUrl || "",
           tagline: city.tagline || "",
           intro: city.intro || "",
           about: city.about || "",

@@ -1,17 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { isAdminRequest } from "@/lib/auth";
-import { SETTING_KEYS } from "@/lib/settings";
+import { getSettings, SETTING_KEYS } from "@/lib/settings";
 
 export async function GET(request: NextRequest) {
   if (!(await isAdminRequest(request))) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
 
-  const rows = await prisma.siteSetting.findMany();
-  return NextResponse.json(
-    Object.fromEntries(rows.map((r) => [r.key, r.value]))
-  );
+  // Merge con los defaults de codigo: una key todavia sin fila en la DB tiene
+  // que llegar al admin con su valor real, no vacia
+  return NextResponse.json(await getSettings());
 }
 
 export async function PUT(request: NextRequest) {

@@ -1,17 +1,26 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getWhatsAppUrl } from "@/lib/utils";
-import type { CountrySlug } from "@/lib/country";
+import { countryLabel, type CountrySlug } from "@/lib/country";
 
 interface FooterProps {
   country: CountrySlug;
+  countries: CountrySlug[];
   whatsappNumber: string;
   whatsappDisplay: string;
   contactEmail: string;
 }
 
+/** "Argentina", "Argentina y Venezuela", "A, B y C" */
+function listCountries(countries: CountrySlug[]): string {
+  const labels = countries.map(countryLabel);
+  if (labels.length <= 1) return labels[0] ?? "";
+  return `${labels.slice(0, -1).join(", ")} y ${labels[labels.length - 1]}`;
+}
+
 export function Footer({
   country,
+  countries,
   whatsappNumber,
   whatsappDisplay,
   contactEmail,
@@ -31,8 +40,8 @@ export function Footer({
               className="mb-4"
             />
             <p className="text-navy-300 text-sm leading-relaxed">
-              Experiencias de turismo deportivo de elite en Argentina y
-              Venezuela. Practicar, participar y presenciar.
+              Experiencias de turismo deportivo de elite en{" "}
+              {listCountries(countries)}. Practicar, participar y presenciar.
             </p>
           </div>
 

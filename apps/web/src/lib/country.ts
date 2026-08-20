@@ -29,3 +29,16 @@ export function slugFromCountry(country: Country): CountrySlug {
 export function countryLabel(slug: CountrySlug): string {
   return COUNTRIES_INFO[slug].label;
 }
+
+/**
+ * Parsea la lista de paises habilitados (slugs separados por coma) preservando
+ * el orden canonico. Nunca devuelve vacio: si no hay ninguno valido cae en
+ * Argentina, para que el sitio publico siempre tenga al menos un pais.
+ */
+export function parseEnabledCountries(value: string | undefined): CountrySlug[] {
+  const wanted = new Set(
+    (value || "").split(",").map((s) => s.trim().toLowerCase())
+  );
+  const enabled = COUNTRY_SLUGS.filter((slug) => wanted.has(slug));
+  return enabled.length > 0 ? enabled : ["argentina"];
+}

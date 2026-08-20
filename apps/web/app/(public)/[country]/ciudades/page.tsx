@@ -49,24 +49,24 @@ export default async function CitiesPage({
 
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {countryCities.map((city) => (
               <Link
                 key={city.slug}
                 href={`/${country}/ciudades/${city.slug}`}
                 className="group block"
               >
-                <div className="relative aspect-[16/10] rounded-2xl overflow-hidden shadow-sm">
+                <div className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-sm">
                   <Image
                     src={city.imageUrl}
                     alt={city.name}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 768px) 100vw, 50vw"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy-900/80 via-navy-900/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy-900/85 via-navy-900/25 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <h2 className="font-heading text-3xl md:text-4xl font-bold text-white uppercase tracking-wider">
+                    <h2 className="font-heading text-2xl md:text-3xl font-bold text-white uppercase tracking-wider">
                       {city.name}
                     </h2>
                     <p className="text-gold-400 text-sm font-medium mt-1">

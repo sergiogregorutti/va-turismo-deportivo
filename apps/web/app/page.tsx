@@ -1,16 +1,27 @@
+export const dynamic = "force-dynamic";
+
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import type { Metadata } from "next";
-import { COUNTRY_SLUGS, countryLabel } from "@/lib/country";
+import { countryLabel } from "@/lib/country";
+import { getEnabledCountries } from "@/lib/settings";
 import { CountryFlag } from "@/components/shared/CountryFlag";
 
 export const metadata: Metadata = {
   title: "VA Turismo Deportivo | Seleccioná tu país",
   description:
-    "Experiencias de turismo deportivo en Argentina y Venezuela. Seleccioná tu país para descubrir experiencias, hospedajes y destinos.",
+    "Experiencias de turismo deportivo en Latinoamérica. Seleccioná tu país para descubrir experiencias, hospedajes y destinos.",
 };
 
-export default function CountrySelectPage() {
+export default async function CountrySelectPage() {
+  const countries = await getEnabledCountries();
+
+  // Con un solo pais habilitado el selector no aporta nada
+  if (countries.length === 1) {
+    redirect(`/${countries[0]}`);
+  }
+
   return (
     <div className="min-h-screen bg-navy-800 flex items-center justify-center px-4">
       <div className="text-center py-16">
@@ -33,7 +44,7 @@ export default function CountrySelectPage() {
 
         {/* Country options */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-          {COUNTRY_SLUGS.map((slug) => (
+          {countries.map((slug) => (
             <Link
               key={slug}
               href={`/${slug}`}

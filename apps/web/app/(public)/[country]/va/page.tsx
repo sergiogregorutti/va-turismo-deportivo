@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { TriadaCards, type TriadaItem } from "@/components/shared/TriadaCards";
+import { SocialLinks } from "@/components/shared/SocialLinks";
 import { getSettings } from "@/lib/settings";
 
 export const metadata: Metadata = {
@@ -80,9 +81,6 @@ export default async function VAPage({
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-12">
-            <h2 className="font-heading text-3xl md:text-4xl font-bold text-navy-700 mb-6 text-center">
-              VA Turismo Deportivo
-            </h2>
             <p className="text-gray-600 leading-relaxed text-lg">
               {settings.va_intro}
             </p>
@@ -173,6 +171,12 @@ export default async function VAPage({
                 <p className="text-gray-600 leading-relaxed">
                   {settings.va_nosotros}
                 </p>
+                <SocialLinks
+                  instagram={settings.social_instagram}
+                  linkedin={settings.social_linkedin}
+                  website={settings.social_website}
+                  className="mt-8 justify-center lg:justify-start"
+                />
               </div>
 
               <div className="text-center lg:text-left">

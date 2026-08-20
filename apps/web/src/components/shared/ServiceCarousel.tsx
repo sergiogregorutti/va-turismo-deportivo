@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export type ServiceCarouselItem = {
+  id?: string;
   title: string;
   description: string;
   imageUrl: string;
@@ -86,7 +87,7 @@ export function ServiceCarousel({ items }: { items: ServiceCarouselItem[] }) {
 
           return (
             <div
-              key={item.title}
+              key={item.id ?? item.title}
               className="snap-start shrink-0 w-[80%] sm:w-[45%] lg:w-[31%]"
             >
               {item.href ? (

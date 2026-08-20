@@ -37,6 +37,7 @@ export async function PUT(
       province,
       country,
       imageUrl,
+      heroImageUrl,
       tagline,
       intro,
       about,
@@ -59,6 +60,7 @@ export async function PUT(
         province: province || "",
         country,
         imageUrl,
+        heroImageUrl: heroImageUrl || null,
         tagline: tagline || "",
         intro: intro || "",
         about: about || "",
@@ -72,8 +74,14 @@ export async function PUT(
       },
     });
 
-    if (previous && previous.imageUrl !== city.imageUrl) {
-      await safeDeleteBlobs([previous.imageUrl]);
+    if (previous) {
+      const orphaned = [
+        previous.imageUrl !== city.imageUrl ? previous.imageUrl : null,
+        previous.heroImageUrl !== city.heroImageUrl
+          ? previous.heroImageUrl
+          : null,
+      ].filter((url): url is string => Boolean(url));
+      if (orphaned.length > 0) await safeDeleteBlobs(orphaned);
     }
 
     return NextResponse.json(city);
@@ -93,7 +101,11 @@ export async function DELETE(
   try {
     const { id } = await params;
     const city = await prisma.cityPage.delete({ where: { id } });
-    await safeDeleteBlobs([city.imageUrl]);
+    await safeDeleteBlobs(
+      [city.imageUrl, city.heroImageUrl].filter((url): url is string =>
+        Boolean(url)
+      )
+    );
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json({ error: "Error del servidor" }, { status: 500 });

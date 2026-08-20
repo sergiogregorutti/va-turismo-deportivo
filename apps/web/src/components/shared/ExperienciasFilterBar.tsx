@@ -3,7 +3,11 @@
 import { Select } from "@/components/ui/Select";
 import { useFilterOptions } from "@/hooks/useFilterOptions";
 import { FormatoInfoPopover } from "@/components/shared/FormatoInfoPopover";
-import { countryFromSlug, type CountrySlug } from "@/lib/country";
+import {
+  countryFromSlug,
+  countryLabel,
+  type CountrySlug,
+} from "@/lib/country";
 
 interface ExperienciasFilterBarProps {
   country: CountrySlug;
@@ -36,10 +40,14 @@ export function ExperienciasFilterBar({
   const hasFilters = activeFilterLabels.length > 0;
 
   return (
-    <section className="bg-white border-b border-gray-100 py-6">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+    <section className="bg-white py-12 border-b border-gray-100">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <h2 className="font-heading text-2xl md:text-3xl font-bold text-navy-700 text-center mb-8 max-w-4xl mx-auto leading-snug">
+          Filtrá por destino, formato, modalidad o fecha y encontrá tu próxima
+          experiencia deportiva en {countryLabel(country)}
+        </h2>
         <form action={`/${country}/experiencias`} method="GET">
-          <div className="grid grid-cols-1 sm:grid-cols-7 gap-4 items-end">
+          <div className="grid grid-cols-1 md:grid-cols-6 gap-4 items-end">
             <Select
               name="destino"
               label="Destino"
@@ -81,27 +89,17 @@ export function ExperienciasFilterBar({
               onChange={(v) => setFilter("month", v)}
               options={options.months}
             />
-            <div className="flex gap-2">
-              <button
-                type="submit"
-                className="bg-gold-400 hover:bg-gold-500 text-navy-900 font-semibold px-6 py-3 rounded-lg transition-colors cursor-pointer whitespace-nowrap"
-              >
-                Filtrar
-              </button>
-              {hasFilters && (
-                <a
-                  href={`/${country}/experiencias`}
-                  className="px-4 py-3 border border-gray-200 rounded-lg text-gray-500 hover:bg-gray-50 transition-colors cursor-pointer whitespace-nowrap"
-                >
-                  Limpiar
-                </a>
-              )}
-            </div>
+            <button
+              type="submit"
+              className="bg-gold-400 hover:bg-gold-500 text-navy-900 font-semibold px-8 py-3 rounded-lg transition-colors whitespace-nowrap h-[48px] cursor-pointer"
+            >
+              Filtrar
+            </button>
           </div>
         </form>
 
         {hasFilters && (
-          <div className="flex gap-2 mt-4 flex-wrap">
+          <div className="flex items-center justify-center gap-2 mt-6 flex-wrap">
             {activeFilterLabels.map((filter) => (
               <span
                 key={filter}
@@ -110,6 +108,12 @@ export function ExperienciasFilterBar({
                 {filter}
               </span>
             ))}
+            <a
+              href={`/${country}/experiencias`}
+              className="text-xs px-3 py-1.5 rounded-full border border-gray-200 text-gray-500 hover:bg-gray-50 font-medium transition-colors cursor-pointer"
+            >
+              Limpiar filtros
+            </a>
           </div>
         )}
       </div>

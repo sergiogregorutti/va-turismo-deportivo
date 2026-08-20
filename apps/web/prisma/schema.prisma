@@ -39,6 +39,11 @@ enum Formato {
   EQUIPOS
 }
 
+enum ServiceCategory {
+  TRANSPORTE
+  CONCIERGE
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -116,24 +121,25 @@ model Hospedaje {
 }
 
 model CityPage {
-  id          String   @id @default(cuid())
-  slug        String   @unique
-  name        String
-  province    String
-  country     Country
-  imageUrl    String
-  tagline     String
-  intro       String   @db.Text
-  about       String   @db.Text
-  climate     String   @db.Text
-  bestSeasons String[]
-  sports      String[]
-  highlights  Json     @default("[]")
-  gettingThere String  @db.Text
-  order       Int      @default(0)
-  published   Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           String   @id @default(cuid())
+  slug         String   @unique
+  name         String
+  province     String
+  country      Country
+  imageUrl     String
+  heroImageUrl String?
+  tagline      String
+  intro        String   @db.Text
+  about        String   @db.Text
+  climate      String   @db.Text
+  bestSeasons  String[]
+  sports       String[]
+  highlights   Json     @default("[]")
+  gettingThere String   @db.Text
+  order        Int      @default(0)
+  published    Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   @@index([country, published])
 }
@@ -175,6 +181,21 @@ model ModalityPage {
   whatsappMessage String   @db.Text
   metaDescription String   @db.Text
   updatedAt       DateTime @updatedAt
+}
+
+model ServiceItem {
+  id          String          @id @default(cuid())
+  category    ServiceCategory
+  title       String
+  description String          @db.Text
+  imageUrl    String
+  badge       String?
+  order       Int             @default(0)
+  published   Boolean         @default(true)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([category, published])
 }
 
 model SiteSetting {

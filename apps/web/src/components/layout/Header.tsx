@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { COUNTRY_SLUGS, countryLabel, type CountrySlug } from "@/lib/country";
+import { countryLabel, type CountrySlug } from "@/lib/country";
 import { CountryFlag } from "@/components/shared/CountryFlag";
 
 const navLinks = [
@@ -16,9 +16,18 @@ const navLinks = [
   { href: "/va", label: "VA" },
 ];
 
-function CountrySwitcher({ country }: { country: CountrySlug }) {
+function CountrySwitcher({
+  country,
+  countries,
+}: {
+  country: CountrySlug;
+  countries: CountrySlug[];
+}) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+
+  // Con un solo pais habilitado no hay nada para elegir
+  if (countries.length < 2) return null;
 
   return (
     <div className="relative">
@@ -47,7 +56,7 @@ function CountrySwitcher({ country }: { country: CountrySlug }) {
 
       {open && (
         <div className="absolute right-0 top-full mt-2 bg-white rounded-lg shadow-lg overflow-hidden min-w-[160px] z-50">
-          {COUNTRY_SLUGS.map((slug) => {
+          {countries.map((slug) => {
             // Keep the current page when switching country
             const subpath = pathname.replace(/^\/(argentina|venezuela)/, "");
             return (
@@ -71,7 +80,13 @@ function CountrySwitcher({ country }: { country: CountrySlug }) {
   );
 }
 
-export function Header({ country }: { country: CountrySlug }) {
+export function Header({
+  country,
+  countries,
+}: {
+  country: CountrySlug;
+  countries: CountrySlug[];
+}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const base = `/${country}`;
 
@@ -102,7 +117,7 @@ export function Header({ country }: { country: CountrySlug }) {
                 {link.label}
               </Link>
             ))}
-            <CountrySwitcher country={country} />
+            <CountrySwitcher country={country} countries={countries} />
             <Link
               href={`${base}/contacto`}
               className="bg-gold-400 hover:bg-gold-500 text-navy-900 font-semibold text-sm px-5 py-2.5 rounded-lg transition-colors"
@@ -113,7 +128,7 @@ export function Header({ country }: { country: CountrySlug }) {
 
           {/* Mobile: country switcher + menu button */}
           <div className="flex items-center gap-3 md:hidden">
-            <CountrySwitcher country={country} />
+            <CountrySwitcher country={country} countries={countries} />
             <button
               className="p-2 text-white"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

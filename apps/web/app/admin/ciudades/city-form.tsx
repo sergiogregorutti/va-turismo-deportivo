@@ -16,6 +16,7 @@ export interface CityFormValues {
   province: string;
   country: string;
   imageUrl: string;
+  heroImageUrl: string;
   tagline: string;
   intro: string;
   about: string;
@@ -33,6 +34,7 @@ export const EMPTY_CITY: CityFormValues = {
   province: "",
   country: "",
   imageUrl: "",
+  heroImageUrl: "",
   tagline: "",
   intro: "",
   about: "",
@@ -199,11 +201,29 @@ export function CityForm({
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Imagen principal *
+            Imagen vertical *
           </label>
+          <p className="text-xs text-gray-400 mb-2">
+            Se usa en los listados de ciudades. Formato vertical (3:4).
+          </p>
           <ImageUploader
             value={values.imageUrl ? [values.imageUrl] : []}
             onChange={(urls) => set("imageUrl", urls[0] || "")}
+            folder="ciudades"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Imagen horizontal (header del detalle)
+          </label>
+          <p className="text-xs text-gray-400 mb-2">
+            Se usa como portada de la pagina de la ciudad. Formato apaisado
+            (16:9). Si no cargas ninguna se usa la vertical.
+          </p>
+          <ImageUploader
+            value={values.heroImageUrl ? [values.heroImageUrl] : []}
+            onChange={(urls) => set("heroImageUrl", urls[0] || "")}
             folder="ciudades"
           />
         </div>
